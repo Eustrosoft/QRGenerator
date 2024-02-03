@@ -3,11 +3,10 @@ package org.eustrosoft;
 public enum FileType {
     SVG("svg"),
     PNG("png"),
-    WBMP("wbmp"),
     JPG("jpg"),
     JPEG("jpeg");
 
-    public final static String[] CONTENT_TYPES = {"image/svg+xml", "image/png", "image/vnd.wap.wbmp", "image/jpg", "image/jpeg"};
+    public final static String[] CONTENT_TYPES = {"image/svg+xml", "image/png", "image/jpg", "image/jpeg"};
 
     private String type;
 

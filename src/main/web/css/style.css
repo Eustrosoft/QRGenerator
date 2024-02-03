@@ -1,0 +1,13 @@
+* {
+    justify-content: center;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+}
+
+input {
+    margin: 4px;
+}

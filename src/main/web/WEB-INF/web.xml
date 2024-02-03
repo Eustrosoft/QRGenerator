@@ -4,6 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <context-param>
+        <param-name>GENERATOR_PATH</param-name>
+        <param-value>/generate</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>QRGenerating</servlet-name>
         <servlet-class>org.eustrosoft.QRGeneratorServlet</servlet-class>
