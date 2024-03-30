@@ -1,12 +1,14 @@
 package org.eustrosoft;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import java.awt.Color;
 
 public class QRParams {
     private String text = "";
     private FileType fileType = FileType.SVG;
     private Integer x = 300;
-    private Integer y = 300;
+    private ErrorCorrectionLevel correctionLevel = ErrorCorrectionLevel.L;
 
     private Color color = Color.BLACK;
     private Color backgroundColor = Color.WHITE;
@@ -22,9 +24,6 @@ public class QRParams {
         if (x != null) {
             this.x = x;
         }
-        if (y != null) {
-            this.y = y;
-        }
         if (fileType != null) {
             this.fileType = fileType;
         }
@@ -34,7 +33,7 @@ public class QRParams {
     }
 
     public static QRParams fromStrings(String text, String color, String background,
-                                       String type, String x, String y
+                                       String type, String x, String correctionLevel
     ) {
         String qrText = text == null ? "" : text;
         QRParams params = new QRParams(qrText);
@@ -48,12 +47,24 @@ public class QRParams {
             params.setFileType(FileType.of(type));
         }
         if (x != null) {
-            params.setX(Integer.parseInt(x));
+            params.setX(x);
         }
-        if (y != null) {
-            params.setY(Integer.parseInt(y));
+        if (correctionLevel != null) {
+            params.setCorrectionLevel(correctionLevel);
         }
         return params;
+    }
+
+    public ErrorCorrectionLevel getCorrectionLevel() {
+        return correctionLevel;
+    }
+
+    public void setCorrectionLevel(String correctionLevel) {
+        try {
+            this.correctionLevel = ErrorCorrectionLevel.valueOf(correctionLevel);
+        } catch (Exception ex) {
+            this.correctionLevel = ErrorCorrectionLevel.L;
+        }
     }
 
     public Color getBackgroundColor() {
@@ -84,16 +95,8 @@ public class QRParams {
         return x;
     }
 
-    public void setX(Integer x) {
-        this.x = x;
-    }
-
-    public Integer getY() {
-        return y;
-    }
-
-    public void setY(Integer y) {
-        this.y = y;
+    public void setX(String x) {
+        this.x = getValueForDimension(x);
     }
 
     public String getText() {
@@ -102,5 +105,17 @@ public class QRParams {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    private Integer getValueForDimension(String str) {
+        try {
+            int value = Integer.parseInt(str);
+            if (value <= 50) {
+                return 50;
+            }
+            return Math.min(value, 2048);
+        } catch (Exception ex) {
+            return 300;
+        }
     }
 }

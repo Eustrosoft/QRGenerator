@@ -17,6 +17,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,13 +27,14 @@ public class QRGeneratorServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
         try {
+            req.setCharacterEncoding("UTF-8");
             QRParams params = QRParams.fromStrings(
                     req.getParameter("text"),
                     req.getParameter("color"),
                     req.getParameter("background"),
                     req.getParameter("fileType"),
                     req.getParameter("x"),
-                    req.getParameter("y")
+                    req.getParameter("correctionLevel")
             );
 
             resp.setStatus(200);
@@ -44,7 +46,7 @@ public class QRGeneratorServlet extends HttpServlet {
                 writer.println("<?xml\n" +
                         "version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
-                writer.println(getQRCodeSvg(qrImage, params.getX(), params.getY()));
+                writer.println(getQRCodeSvg(qrImage, params.getX()));
             } else {
                 resp.setContentType(FileType.getContentType(params.getFileType()));
                 ImageIO.write(qrImage, params.getFileType().getType(), resp.getOutputStream());
@@ -58,11 +60,12 @@ public class QRGeneratorServlet extends HttpServlet {
     }
 
     private BufferedImage getQRImage(QRParams params) throws WriterException {
-        Map<EncodeHintType, ErrorCorrectionLevel> hintMap = new HashMap<EncodeHintType, ErrorCorrectionLevel>();
-        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        Map<EncodeHintType, String> hintMap = new HashMap<>();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, params.getCorrectionLevel().toString());
+        hintMap.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix byteMatrix = qrCodeWriter.encode(
-                params.getText(), BarcodeFormat.QR_CODE, params.getX(), params.getY(), hintMap
+                params.getText(), BarcodeFormat.QR_CODE, params.getX(), params.getX(), hintMap
         );
 
         int matrixWidth = byteMatrix.getWidth();
@@ -86,10 +89,10 @@ public class QRGeneratorServlet extends HttpServlet {
         return image;
     }
 
-    private static String getQRCodeSvg(BufferedImage image, int width, int height) {
-        SVGGraphics2D g2 = new SVGGraphics2D(width, height);
-        g2.drawImage(image, 0, 0, width, height, null);
-        ViewBox viewBox = new ViewBox(0, 0, width, height);
+    private static String getQRCodeSvg(BufferedImage image, int width) {
+        SVGGraphics2D g2 = new SVGGraphics2D(width, width);
+        g2.drawImage(image, 0, 0, width, width, null);
+        ViewBox viewBox = new ViewBox(0, 0, width, width);
         return g2.getSVGElement(null, true, viewBox, null, null);
     }
 }

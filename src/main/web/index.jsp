@@ -5,6 +5,7 @@
 <%@ page import="java.io.UnsupportedEncodingException" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.google.zxing.qrcode.decoder.ErrorCorrectionLevel" %>
 <html>
 <head>
     <title>QR generator</title>
@@ -19,9 +20,9 @@
     // qr code settings
     private static final String PARAM_COLOR = "PARAM_COLOR";
     private static final String PARAM_WIDTH = "PARAM_WIDTH";
-    private static final String PARAM_HEIGHT = "PARAM_HEIGHT";
     private static final String PARAM_BACKGROUND = "PARAM_BACKGROUND";
     private static final String PARAM_FILE_TYPE = "PARAM_FILE_TYPE";
+    private static final String PARAM_CORRECTION_LEVEL = "PARAM_CORRECTION_LEVEL";
 
     // actions
     private static final String ACTION_GENERATE = "ACTION_GENERATE";
@@ -29,7 +30,6 @@
     // placeholders
     private static final String PLACEHOLDER_TEXT = "Place your text here...";
     private static final Integer PLACEHOLDER_WIDTH = 300;
-    private static final Integer PLACEHOLDER_HEIGHT = 300;
     private static final String PLACEHOLDER_COLOR = "#000000";
     private static final String PLACEHOLDER_BACKGROUND = "#FFFFFF";
 
@@ -37,8 +37,8 @@
     private String fileType = "";
     private String color = "";
     private String background = "";
-    private String height = "";
     private String width = "";
+    private String correctionLevel = "";
 
     String getIfNotNull(HttpServletRequest request, String paramName) {
         String parameter = request.getParameter(paramName);
@@ -56,14 +56,14 @@
         if (isNotEmpty(background)) {
             params.add(getPathParam("background", background));
         }
-        if (isNotEmpty(height)) {
-            params.add(getPathParam("height", height));
-        }
         if (isNotEmpty(width)) {
-            params.add(getPathParam("WIDTH", width));
+            params.add(getPathParam("x", width));
         }
         if (isNotEmpty(fileType)) {
             params.add(getPathParam("fileType", fileType));
+        }
+        if (isNotEmpty(correctionLevel)) {
+            params.add(getPathParam("correctionLevel", correctionLevel));
         }
         return String.join("&", params);
     }
@@ -73,6 +73,24 @@
             return "";
         }
         return String.format("%s=%s", paramName, URLEncoder.encode(param, "UTF-8"));
+    }
+
+    String getErrorCorrectionLevelDescription(ErrorCorrectionLevel correctionLevel) {
+        if (correctionLevel == null) {
+            return null;
+        }
+        switch (correctionLevel) {
+            case H:
+                return "Highest quality (~30% correction)";
+            case L:
+                return "Low quality (~7% correction)";
+            case M:
+                return "Medium quality (~15% correction)";
+            case Q:
+                return "High quality (~25% correction)";
+            default:
+                return null;
+        }
     }
 
     boolean isNotEmpty(String str) {
@@ -87,10 +105,10 @@
 
     text = getIfNotNull(request, PARAM_TEXT);
     width = getIfNotNull(request, PARAM_WIDTH);
-    height = getIfNotNull(request, PARAM_HEIGHT);
     background = getIfNotNull(request, PARAM_BACKGROUND);
     color = getIfNotNull(request, PARAM_COLOR);
     fileType = getIfNotNull(request, PARAM_FILE_TYPE);
+    correctionLevel = getIfNotNull(request, PARAM_CORRECTION_LEVEL);
 
     if (!isNotEmpty(background)) {
         background = PLACEHOLDER_BACKGROUND;
@@ -110,19 +128,38 @@
         <div>
             <form>
                 <label>Text:</label>
-                <textarea name="<%=PARAM_TEXT%>" placeholder="<%=PLACEHOLDER_TEXT%>" cols="50" rows="10"><%=text%></textarea>
+                <textarea name="<%=PARAM_TEXT%>" placeholder="<%=PLACEHOLDER_TEXT%>" cols="50"
+                          rows="10"><%=text%></textarea>
                 <br>
                 <label>Width:</label>
-                <input name="<%=PARAM_WIDTH%>" type="number" placeholder="<%=PLACEHOLDER_WIDTH%>" value="<%=width%>">
-                <br>
-                <label>Height:</label>
-                <input name="<%=PARAM_HEIGHT%>" type="number" placeholder="<%=PLACEHOLDER_HEIGHT%>" value="<%=height%>">
+                <input name="<%=PARAM_WIDTH%>" max="2048" min="50" type="number" placeholder="<%=PLACEHOLDER_WIDTH%>" value="<%=width%>">
                 <br>
                 <label>Background:</label>
-                <input name="<%=PARAM_BACKGROUND%>" type="color" placeholder="<%=PLACEHOLDER_BACKGROUND%>" value="<%=background%>">
+                <input name="<%=PARAM_BACKGROUND%>" type="color" placeholder="<%=PLACEHOLDER_BACKGROUND%>"
+                       value="<%=background%>">
                 <br>
                 <label>Color:</label>
                 <input name="<%=PARAM_COLOR%>" type="color" placeholder="<%=PLACEHOLDER_COLOR%>" value="<%=color%>">
+                <br>
+                <label>Correction Level:</label>
+                <select name="<%=PARAM_CORRECTION_LEVEL%>">
+                    <%
+                        String correctionOption = "";
+                        for (ErrorCorrectionLevel errorCorrectionLevel : ErrorCorrectionLevel.values()) {
+                            String selected = "";
+                            if (isNotEmpty(correctionLevel) && errorCorrectionLevel.toString().equalsIgnoreCase(correctionLevel)) {
+                                selected = "selected=\"selected\"";
+                            }
+                            correctionOption = String.format("<option %s value=\"%s\">%s</option>",
+                                    selected,
+                                    errorCorrectionLevel,
+                                    getErrorCorrectionLevelDescription(errorCorrectionLevel)
+                            );
+
+                    %>
+                    <%=correctionOption%>
+                    <%}%>
+                </select>
                 <br>
                 <label>File type:</label>
                 <select name="<%=PARAM_FILE_TYPE%>">
@@ -145,15 +182,17 @@
         </div>
         <div>
             <%if (isNotEmpty(text)) {%>
-                <img src="<%=generatedPath%>" width="<%=width%>" height="<%=height%>">
+            <img src="<%=generatedPath%>" width="<%=width%>">
 
-                <label>Target link:</label>
-                <a name="qr" href="<%=generatedPath%>">Link</a>
+            <label>Target link:</label>
+            <a name="qr" href="<%=generatedPath%>">Link</a>
             <%}%>
         </div>
     </div>
 
-    <hr> <i>timing : <%= ((System.currentTimeMillis() - enter_time) + " ms") %></i>
+    <hr>
+    <i>timing : <%= ((System.currentTimeMillis() - enter_time) + " ms") %>
+    </i>
     <br> Your web-server is <%= application.getServerInfo() %><br>
 </div>
 </body>
