@@ -1,8 +1,8 @@
-## QR code generating servlet
+# QR code generating servlet
 
 web.xml - change config
 
-# Parameters for servlet: 
+## Parameters for servlet: 
 - text - text encoded url that will be placed in qr
 - color - color of qr code
 - background - background color
