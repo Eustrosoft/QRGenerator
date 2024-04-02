@@ -5,6 +5,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.Color;
 
 public class QRParams {
+    public static final Integer MAX_TEXT_SIZE = 1900;
+
     private String text = "";
     private FileType fileType = FileType.SVG;
     private Integer x = 300;
@@ -35,7 +37,7 @@ public class QRParams {
     public static QRParams fromStrings(String text, String color, String background,
                                        String type, String x, String correctionLevel
     ) {
-        String qrText = text == null ? "" : text;
+        String qrText = text == null ? "" : text.substring(0, MAX_TEXT_SIZE);
         QRParams params = new QRParams(qrText);
         if (color != null) {
             params.setColor(Color.decode(color));

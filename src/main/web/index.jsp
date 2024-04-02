@@ -103,7 +103,7 @@
 
     String action_create = request.getParameter(ACTION_GENERATE);
 
-    text = getIfNotNull(request, PARAM_TEXT);
+    text = getIfNotNull(request, PARAM_TEXT).substring(0, 1900);
     width = getIfNotNull(request, PARAM_WIDTH);
     background = getIfNotNull(request, PARAM_BACKGROUND);
     color = getIfNotNull(request, PARAM_COLOR);
@@ -129,7 +129,7 @@
             <form>
                 <label>Text:</label>
                 <textarea name="<%=PARAM_TEXT%>" placeholder="<%=PLACEHOLDER_TEXT%>" cols="50"
-                          rows="10"><%=text%></textarea>
+                          rows="10" maxlength="1900"><%=text%></textarea>
                 <br>
                 <label>Width:</label>
                 <input name="<%=PARAM_WIDTH%>" max="2048" min="50" type="number" placeholder="<%=PLACEHOLDER_WIDTH%>" value="<%=width%>">
