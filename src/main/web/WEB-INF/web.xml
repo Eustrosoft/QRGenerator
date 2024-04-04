@@ -23,4 +23,9 @@
         <servlet-name>QRGenerating</servlet-name>
         <url-pattern>/generate</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QRGenerating</servlet-name>
+        <url-pattern>/generate/</url-pattern>
+    </servlet-mapping>
+
 </web-app>
