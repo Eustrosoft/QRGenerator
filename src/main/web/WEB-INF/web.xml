@@ -9,6 +9,11 @@
         <param-value>/generate</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>BASIC_REDIRECT_URL</param-name>
+        <param-value>http://qr.qxyz.ru</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>QRGenerating</servlet-name>
         <servlet-class>org.eustrosoft.QRGeneratorServlet</servlet-class>

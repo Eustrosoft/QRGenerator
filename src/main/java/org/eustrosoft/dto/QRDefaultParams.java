@@ -1,10 +1,11 @@
-package org.eustrosoft;
+package org.eustrosoft.dto;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.eustrosoft.FileType;
 
 import java.awt.Color;
 
-public class QRParams {
+public class QRDefaultParams implements QRDto {
     public static final Integer MAX_TEXT_SIZE = 1900;
 
     private String text = "";
@@ -15,12 +16,12 @@ public class QRParams {
     private Color color = Color.BLACK;
     private Color backgroundColor = Color.WHITE;
 
-    public QRParams(String text) {
+    public QRDefaultParams(String text) {
         this.text = text;
     }
 
-    public QRParams(String text, Color color,
-                    FileType fileType, Integer x, Integer y
+    public QRDefaultParams(String text, Color color,
+                           FileType fileType, Integer x
     ) {
         this.text = text;
         if (x != null) {
@@ -34,11 +35,21 @@ public class QRParams {
         }
     }
 
-    public static QRParams fromStrings(String text, String color, String background,
-                                       String type, String x, String correctionLevel
+    public QRDefaultParams(String text, FileType fileType, Integer x,
+                           ErrorCorrectionLevel correctionLevel, Color color, Color backgroundColor) {
+        this.text = text;
+        this.fileType = fileType;
+        this.x = x;
+        this.correctionLevel = correctionLevel;
+        this.color = color;
+        this.backgroundColor = backgroundColor;
+    }
+
+    public static QRDto fromStrings(String text, String color, String background,
+                                              String type, String x, String correctionLevel
     ) {
         String qrText = getMaxStringForGenerate(text);
-        QRParams params = new QRParams(qrText);
+        QRDefaultParams params = new QRDefaultParams(qrText);
         if (color != null) {
             params.setColor(Color.decode(color));
         }

@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.eustrosoft.dto.QRDto;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 
@@ -27,18 +28,14 @@ public class QRGeneratorServlet extends HttpServlet {
             throws IOException {
         try {
             req.setCharacterEncoding("UTF-8");
-            QRParams params = QRParams.fromStrings(
-                    req.getParameter("text"),
-                    req.getParameter("color"),
-                    req.getParameter("background"),
-                    req.getParameter("fileType"),
-                    req.getParameter("x"),
-                    req.getParameter("correctionLevel")
-            );
-
             resp.setStatus(200);
 
+            QRDto params = QRParamFactory.getRightDto(req);
+            if (params == null) {
+                throw new Exception("Could not parse request");
+            }
             BufferedImage qrImage = getQRImage(params);
+
             if (params.getFileType().equals(FileType.SVG)) {
                 resp.setContentType(FileType.getContentType(params.getFileType()));
                 PrintWriter writer = resp.getWriter();
@@ -52,13 +49,13 @@ public class QRGeneratorServlet extends HttpServlet {
             }
         } catch (Exception ex) {
             PrintWriter writer = resp.getWriter();
-            writer.println("Illegal arguments");
+            writer.println(ex.getMessage());
             resp.setStatus(400);
             writer.flush();
         }
     }
 
-    private BufferedImage getQRImage(QRParams params) throws WriterException {
+    private BufferedImage getQRImage(QRDto params) throws WriterException {
         Map<EncodeHintType, String> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, params.getCorrectionLevel().toString());
         hintMap.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
