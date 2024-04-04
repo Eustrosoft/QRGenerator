@@ -37,7 +37,7 @@ public class QRParams {
     public static QRParams fromStrings(String text, String color, String background,
                                        String type, String x, String correctionLevel
     ) {
-        String qrText = text == null ? "" : text.substring(0, MAX_TEXT_SIZE);
+        String qrText = getMaxStringForGenerate(text);
         QRParams params = new QRParams(qrText);
         if (color != null) {
             params.setColor(Color.decode(color));
@@ -119,5 +119,16 @@ public class QRParams {
         } catch (Exception ex) {
             return 300;
         }
+    }
+
+    private static String getMaxStringForGenerate(String str) {
+        if (str == null || str.isEmpty()) {
+            return "";
+        }
+        int length = str.length();
+        if (length > MAX_TEXT_SIZE) {
+            return str.substring(0, MAX_TEXT_SIZE);
+        }
+        return str;
     }
 }
