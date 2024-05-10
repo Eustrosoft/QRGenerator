@@ -51,10 +51,10 @@ public class QRDefaultParams implements QRDto {
         String qrText = getMaxStringForGenerate(text);
         QRDefaultParams params = new QRDefaultParams(qrText);
         if (color != null) {
-            params.setColor(Color.decode(color));
+            params.setColor(color);
         }
         if (background != null) {
-            params.setBackgroundColor(Color.decode(background));
+            params.setBackgroundColor(background);
         }
         if (type != null) {
             params.setFileType(FileType.of(type));
@@ -88,6 +88,16 @@ public class QRDefaultParams implements QRDto {
         this.backgroundColor = backgroundColor;
     }
 
+    public void setBackgroundColor(String backgroundColor) {
+        if (backgroundColor != null) {
+            try {
+                this.backgroundColor = Color.decode(backgroundColor);
+            } catch (Exception ex) {
+                this.backgroundColor = Color.WHITE;
+            }
+        }
+    }
+
     public Color getColor() {
         return color;
     }
@@ -96,12 +106,32 @@ public class QRDefaultParams implements QRDto {
         this.color = color;
     }
 
+    public void setColor(String color) {
+        if (color != null) {
+            try {
+                this.color = Color.decode(color);
+            } catch (Exception ignored) {
+                this.color = Color.BLACK;
+            }
+        }
+    }
+
     public FileType getFileType() {
         return fileType;
     }
 
     public void setFileType(FileType fileType) {
         this.fileType = fileType;
+    }
+
+    public void setFileType(String fileType) {
+        if (fileType != null) {
+            try {
+                this.fileType = FileType.valueOf(fileType);
+            } catch (Exception ex) {
+                this.fileType = FileType.PNG;
+            }
+        }
     }
 
     public Integer getX() {

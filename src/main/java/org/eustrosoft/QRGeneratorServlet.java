@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.eustrosoft.dto.QRDto;
+import org.eustrosoft.dto.QREustrosoftParams;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 
@@ -58,7 +59,9 @@ public class QRGeneratorServlet extends HttpServlet {
     private BufferedImage getQRImage(QRDto params) throws WriterException {
         Map<EncodeHintType, String> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, params.getCorrectionLevel().toString());
-        hintMap.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
+        if (!(params instanceof QREustrosoftParams)) {
+            hintMap.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
+        }
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix byteMatrix = qrCodeWriter.encode(
                 params.getText(), BarcodeFormat.QR_CODE, params.getX(), params.getX(), hintMap

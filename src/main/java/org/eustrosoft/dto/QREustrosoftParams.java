@@ -16,12 +16,16 @@ public class QREustrosoftParams extends QRDefaultParams {
     private String d;
     private String site;
 
-    public QREustrosoftParams(String q, String p, String d, String site) throws Exception {
-        super(generateURL(Constants.Default.BASIC_URL, q, p, d, site));
+    public QREustrosoftParams(String basicUrl, String q, String p, String d, String site) throws Exception {
+        super(generateURL(basicUrl, q, p, d, site));
         this.q = q;
         this.p = p;
         this.d = d;
         this.site = site;
+    }
+
+    public QREustrosoftParams(String q, String p, String d, String site) throws Exception {
+        this(Constants.Default.BASIC_URL, q, p, d, site);
     }
 
     public QREustrosoftParams(String q, String p, String d, String site,
@@ -38,7 +42,13 @@ public class QREustrosoftParams extends QRDefaultParams {
             String basicUrl, String q, String p, String d, String site, String fileType,
             String x, String correctionLevel, String color, String backgroundColor
     ) throws Exception {
-        return fromStrings(generateURL(basicUrl, q, p, d, site), color, backgroundColor, fileType, x, correctionLevel);
+        QREustrosoftParams params = new QREustrosoftParams(basicUrl, q, p, d, site);
+        params.setColor(color);
+        params.setCorrectionLevel(correctionLevel);
+        params.setX(x);
+        params.setBackgroundColor(backgroundColor);
+        params.setFileType(fileType);
+        return params;
     }
 
     public String getQ() {
