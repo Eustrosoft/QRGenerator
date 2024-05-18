@@ -119,8 +119,4 @@ public class QREustrosoftParams extends QRDefaultParams {
             return false;
         }
     }
-
-    private static StringBuilder setParam(StringBuilder builder, String param, String value) {
-        return builder.append(param).append(Constants.Query.EQUALS).append(value);
-    }
 }

@@ -9,15 +9,21 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.eustrosoft.dto.QRDefaultParams;
 import org.eustrosoft.dto.QRDto;
 import org.eustrosoft.dto.QREustrosoftParams;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +41,7 @@ public class QRGeneratorServlet extends HttpServlet {
             if (params == null) {
                 throw new Exception("Could not parse request");
             }
-            BufferedImage qrImage = getQRImage(params);
+            BufferedImage qrImage = getQrWithImage(); // getQRImage(params);
 
             if (params.getFileType().equals(FileType.SVG)) {
                 resp.setContentType(FileType.getContentType(params.getFileType()));
@@ -86,6 +92,39 @@ public class QRGeneratorServlet extends HttpServlet {
         }
 
         return image;
+    }
+
+    public BufferedImage getQrWithImage() {
+        try {
+            BufferedImage qrImage = getQRImage(new QRDefaultParams("Hello world"));
+
+            BufferedImage overly = getOverly();
+
+            int deltaHeight = qrImage.getHeight() - overly.getHeight();
+            int deltaWidth = qrImage.getWidth() - overly.getWidth();
+
+            BufferedImage combined = new BufferedImage(qrImage.getHeight(), qrImage.getWidth(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = (Graphics2D) combined.getGraphics();
+
+            g.drawImage(qrImage, 0, 0, null);
+            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+
+            // Write logo into combine image at position (deltaWidth / 2) and
+            // (deltaHeight / 2). Background: Left/Right and Top/Bottom must be
+            // the same space for the logo to be centered
+            g.drawImage(overly, (int) Math.round(deltaWidth / 2), (int) Math.round(deltaHeight / 2), null);
+
+            return combined;
+        } catch (WriterException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private BufferedImage getOverly() throws IOException {
+        return ImageIO.read(new File("/Users/yadzuka/workspace/Eustrosoft/Service/QRGenerator/YouTube-icon.png"));
     }
 
     private static String getQRCodeSvg(BufferedImage image, int width) {

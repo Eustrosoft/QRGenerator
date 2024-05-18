@@ -1,6 +1,7 @@
 package org.eustrosoft.dto;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.eustrosoft.Constants;
 import org.eustrosoft.FileType;
 
 import java.awt.Color;
@@ -171,5 +172,9 @@ public class QRDefaultParams implements QRDto {
             return str.substring(0, MAX_TEXT_SIZE);
         }
         return str;
+    }
+
+    protected static StringBuilder setParam(StringBuilder builder, String param, String value) {
+        return builder.append(param).append(Constants.Query.EQUALS).append(value);
     }
 }
