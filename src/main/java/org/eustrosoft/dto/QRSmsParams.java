@@ -1,10 +1,11 @@
 package org.eustrosoft.dto;
 
-public class QRSmsParams extends QRPhoneNumberParams {
+public class QRSmsParams extends QRDefaultParams {
+    private String phone;
 
     public QRSmsParams(String basicUrl, String phone, String text) {
-        super(basicUrl, generateSms(phone, text));
-        this.setPhone(phone);
+        super(generateSms(phone, text));
+        this.phone = phone;
         this.setText(text);
     }
 
@@ -19,6 +20,14 @@ public class QRSmsParams extends QRPhoneNumberParams {
         params.setBackgroundColor(backgroundColor);
         params.setFileType(fileType);
         return params;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     private static String generateSms(String phoneNumber, String text) {

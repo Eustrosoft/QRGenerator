@@ -41,7 +41,7 @@ public class QRGeneratorServlet extends HttpServlet {
             if (params == null) {
                 throw new Exception("Could not parse request");
             }
-            BufferedImage qrImage = getQrWithImage(); // getQRImage(params);
+            BufferedImage qrImage = getQRImage(params);
 
             if (params.getFileType().equals(FileType.SVG)) {
                 resp.setContentType(FileType.getContentType(params.getFileType()));
@@ -94,38 +94,35 @@ public class QRGeneratorServlet extends HttpServlet {
         return image;
     }
 
-    public BufferedImage getQrWithImage() {
-        try {
-            BufferedImage qrImage = getQRImage(new QRDefaultParams("Hello world"));
-
-            BufferedImage overly = getOverly();
-
-            int deltaHeight = qrImage.getHeight() - overly.getHeight();
-            int deltaWidth = qrImage.getWidth() - overly.getWidth();
-
-            BufferedImage combined = new BufferedImage(qrImage.getHeight(), qrImage.getWidth(), BufferedImage.TYPE_INT_ARGB);
-            Graphics2D g = (Graphics2D) combined.getGraphics();
-
-            g.drawImage(qrImage, 0, 0, null);
-            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-
-            // Write logo into combine image at position (deltaWidth / 2) and
-            // (deltaHeight / 2). Background: Left/Right and Top/Bottom must be
-            // the same space for the logo to be centered
-            g.drawImage(overly, (int) Math.round(deltaWidth / 2), (int) Math.round(deltaHeight / 2), null);
-
-            return combined;
-        } catch (WriterException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private BufferedImage getOverly() throws IOException {
-        return ImageIO.read(new File("/Users/yadzuka/workspace/Eustrosoft/Service/QRGenerator/YouTube-icon.png"));
-    }
+    // TODO: make generation with image
+//    public BufferedImage getQrWithImage() {
+//        try {
+//            BufferedImage qrImage = getQRImage(new QRDefaultParams("Hello world"));
+//
+//            BufferedImage overly = getOverly();
+//
+//            int deltaHeight = qrImage.getHeight() - overly.getHeight();
+//            int deltaWidth = qrImage.getWidth() - overly.getWidth();
+//
+//            BufferedImage combined = new BufferedImage(qrImage.getHeight(), qrImage.getWidth(), BufferedImage.TYPE_INT_ARGB);
+//            Graphics2D g = (Graphics2D) combined.getGraphics();
+//
+//            g.drawImage(qrImage, 0, 0, null);
+//            g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+//
+//            // Write logo into combine image at position (deltaWidth / 2) and
+//            // (deltaHeight / 2). Background: Left/Right and Top/Bottom must be
+//            // the same space for the logo to be centered
+//            g.drawImage(overly, (int) Math.round(deltaWidth / 2), (int) Math.round(deltaHeight / 2), null);
+//
+//            return combined;
+//        } catch (WriterException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     private static String getQRCodeSvg(BufferedImage image, int width) {
         SVGGraphics2D g2 = new SVGGraphics2D(width, width);
