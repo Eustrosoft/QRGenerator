@@ -1,6 +1,7 @@
 package org.eustrosoft.dto;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import javax.servlet.http.HttpServletRequest;
 import org.eustrosoft.FileType;
 
 import java.awt.Color;
@@ -10,9 +11,5 @@ import java.awt.Color;
  */
 public interface QRDto {
     String getText();
-    Integer getX();
-    Color getColor();
-    Color getBackgroundColor();
-    FileType getFileType();
-    ErrorCorrectionLevel getCorrectionLevel();
+    QRImageSettings getImageSettings();
 }

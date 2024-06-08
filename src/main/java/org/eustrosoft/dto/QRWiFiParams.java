@@ -1,28 +1,38 @@
 package org.eustrosoft.dto;
 
-public class QRWiFiParams extends QRPhoneNumberParams {
+import javax.servlet.http.HttpServletRequest;
+
+import static org.eustrosoft.Constants.EMPTY;
+import static org.eustrosoft.Constants.PARAM_ENCRYPTION;
+import static org.eustrosoft.Constants.PARAM_PASSWORD;
+import static org.eustrosoft.Constants.PARAM_SSID;
+import static org.eustrosoft.util.Util.getOrDefault;
+
+public class QRWiFiParams extends QRDefaultParams {
     private String ssid;
     private String password;
     private Encryption encryption;
 
-    public QRWiFiParams(String basicUrl, String ssid, String password, Encryption encryption) {
-        super(basicUrl, generateWiFi(ssid, password, encryption));
+    public static QRWiFiParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        return new QRWiFiParams(
+                getOrDefault(request, PARAM_SSID, EMPTY),
+                getOrDefault(request, PARAM_PASSWORD, EMPTY),
+                getOrDefault(request, PARAM_ENCRYPTION, Encryption.WPA),
+                imageSettings
+        );
+    }
+
+    public QRWiFiParams(
+            String ssid, String password,
+            Encryption encryption, QRImageSettings imageSettings
+    ) {
+        super(generateWiFi(ssid, password, encryption), imageSettings);
         this.ssid = ssid;
         this.password = password;
         this.encryption = encryption;
-    }
-
-    public static QRDto fromStrings(
-            String basicUrl, String ssid, String password, Encryption encryption, String fileType,
-            String x, String correctionLevel, String color, String backgroundColor
-    ) throws Exception {
-        QRWiFiParams params = new QRWiFiParams(basicUrl, ssid, password, encryption);
-        params.setColor(color);
-        params.setCorrectionLevel(correctionLevel);
-        params.setX(x);
-        params.setBackgroundColor(backgroundColor);
-        params.setFileType(fileType);
-        return params;
     }
 
     private static String generateWiFi(String ssid, String password, Encryption encryption) {

@@ -9,21 +9,16 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import org.eustrosoft.dto.QRDefaultParams;
 import org.eustrosoft.dto.QRDto;
 import org.eustrosoft.dto.QREustrosoftParams;
+import org.eustrosoft.dto.QRImageSettings;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -42,17 +37,18 @@ public class QRGeneratorServlet extends HttpServlet {
                 throw new Exception("Could not parse request");
             }
             BufferedImage qrImage = getQRImage(params);
+            QRImageSettings imageSettings = params.getImageSettings();
 
-            if (params.getFileType().equals(FileType.SVG)) {
-                resp.setContentType(FileType.getContentType(params.getFileType()));
+            if (imageSettings.getFileType().equals(FileType.SVG)) {
+                resp.setContentType(FileType.getContentType(imageSettings.getFileType()));
                 PrintWriter writer = resp.getWriter();
                 writer.println("<?xml\n" +
                         "version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");
-                writer.println(getQRCodeSvg(qrImage, params.getX()));
+                writer.println(getQRCodeSvg(qrImage, imageSettings.getX()));
             } else {
-                resp.setContentType(FileType.getContentType(params.getFileType()));
-                ImageIO.write(qrImage, params.getFileType().getType(), resp.getOutputStream());
+                resp.setContentType(FileType.getContentType(imageSettings.getFileType()));
+                ImageIO.write(qrImage, imageSettings.getFileType().getType(), resp.getOutputStream());
             }
         } catch (Exception ex) {
             PrintWriter writer = resp.getWriter();
@@ -64,13 +60,14 @@ public class QRGeneratorServlet extends HttpServlet {
 
     private BufferedImage getQRImage(QRDto params) throws WriterException {
         Map<EncodeHintType, String> hintMap = new HashMap<>();
-        hintMap.put(EncodeHintType.ERROR_CORRECTION, params.getCorrectionLevel().toString());
+        QRImageSettings imageSettings = params.getImageSettings();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, imageSettings.getErrorCorrectionLevel().toString());
         if (!(params instanceof QREustrosoftParams)) {
             hintMap.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8.toString());
         }
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         BitMatrix byteMatrix = qrCodeWriter.encode(
-                params.getText(), BarcodeFormat.QR_CODE, params.getX(), params.getX(), hintMap
+                params.getText(), BarcodeFormat.QR_CODE, imageSettings.getX(), imageSettings.getX(), hintMap
         );
 
         int matrixWidth = byteMatrix.getWidth();
@@ -78,10 +75,10 @@ public class QRGeneratorServlet extends HttpServlet {
         BufferedImage image = new BufferedImage(matrixWidth, matrixWidth, BufferedImage.TYPE_INT_RGB);
         image.createGraphics();
         Graphics2D graphics = (Graphics2D) image.getGraphics();
-        graphics.setColor(params.getBackgroundColor());
+        graphics.setColor(imageSettings.getBackgroundColor());
         graphics.fillRect(0, 0, matrixWidth, matrixWidth);
 
-        graphics.setColor(params.getColor());
+        graphics.setColor(imageSettings.getColor());
 
         for (int i = 0; i < matrixWidth; i++) {
             for (int j = 0; j < matrixWidth; j++) {

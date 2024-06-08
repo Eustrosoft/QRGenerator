@@ -1,14 +1,20 @@
 package org.eustrosoft.dto;
 
+import javax.servlet.http.HttpServletRequest;
 import org.eustrosoft.Constants;
 import org.eustrosoft.FileType;
 
 import java.awt.Color;
 
+import static org.eustrosoft.Constants.EMPTY;
 import static org.eustrosoft.Constants.PARAM_D;
+import static org.eustrosoft.Constants.PARAM_EMAIL;
 import static org.eustrosoft.Constants.PARAM_P;
 import static org.eustrosoft.Constants.PARAM_Q;
 import static org.eustrosoft.Constants.PARAM_SITE;
+import static org.eustrosoft.Constants.PARAM_SUBJECT;
+import static org.eustrosoft.Constants.PARAM_TEXT;
+import static org.eustrosoft.util.Util.getOrDefault;
 
 public class QREustrosoftParams extends QRDefaultParams {
     private String q;
@@ -16,39 +22,28 @@ public class QREustrosoftParams extends QRDefaultParams {
     private String d;
     private String site;
 
-    public QREustrosoftParams(String basicUrl, String q, String p, String d, String site) throws Exception {
-        super(generateURL(basicUrl, q, p, d, site));
-        this.q = q;
-        this.p = p;
-        this.d = d;
-        this.site = site;
-    }
-
-    public QREustrosoftParams(String q, String p, String d, String site) throws Exception {
-        this(Constants.Default.BASIC_URL, q, p, d, site);
-    }
-
-    public QREustrosoftParams(String q, String p, String d, String site,
-                              Color color, Color backgroundColor, FileType fileType, Integer x) throws Exception {
-        super(generateURL(Constants.Default.BASIC_URL, q, p, d, site), color, fileType, x);
-        this.setBackgroundColor(backgroundColor);
-        this.q = q;
-        this.p = p;
-        this.d = d;
-        this.site = site;
-    }
-
-    public static QRDto fromStrings(
-            String basicUrl, String q, String p, String d, String site, String fileType,
-            String x, String correctionLevel, String color, String backgroundColor
+    public static QREustrosoftParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
     ) throws Exception {
-        QREustrosoftParams params = new QREustrosoftParams(basicUrl, q, p, d, site);
-        params.setColor(color);
-        params.setCorrectionLevel(correctionLevel);
-        params.setX(x);
-        params.setBackgroundColor(backgroundColor);
-        params.setFileType(fileType);
-        return params;
+        return new QREustrosoftParams(
+                getOrDefault(request, PARAM_Q, EMPTY),
+                getOrDefault(request, PARAM_P, EMPTY),
+                getOrDefault(request, PARAM_D, EMPTY),
+                getOrDefault(request, PARAM_SITE, EMPTY),
+                imageSettings
+        );
+    }
+
+    public QREustrosoftParams(
+            String q, String p, String d, String site,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        super(generateURL(Constants.Default.BASIC_URL, q, p, d, site), imageSettings);
+        this.q = q;
+        this.p = p;
+        this.d = d;
+        this.site = site;
     }
 
     public String getQ() {

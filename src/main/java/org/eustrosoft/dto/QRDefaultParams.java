@@ -1,180 +1,46 @@
 package org.eustrosoft.dto;
 
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import javax.servlet.http.HttpServletRequest;
 import org.eustrosoft.Constants;
-import org.eustrosoft.FileType;
 
-import java.awt.Color;
+import static org.eustrosoft.Constants.PARAM_TEXT;
+import static org.eustrosoft.util.Util.getOrDefault;
 
 public class QRDefaultParams implements QRDto {
-    public static final Integer MAX_TEXT_SIZE = 1900;
-
     private String text = "";
-    private FileType fileType = FileType.SVG;
-    private Integer x = 300;
-    private ErrorCorrectionLevel correctionLevel = ErrorCorrectionLevel.L;
+    private QRImageSettings imageSettings;
 
-    private Color color = Color.BLACK;
-    private Color backgroundColor = Color.WHITE;
+    public static QRDefaultParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        return new QRDefaultParams(
+                getOrDefault(request, PARAM_TEXT, "No value given"),
+                imageSettings
+        );
+    }
 
     public QRDefaultParams(String text) {
         this.text = text;
+        this.imageSettings = new QRImageSettings();
     }
 
-    public QRDefaultParams(String text, Color color,
-                           FileType fileType, Integer x
-    ) {
+    public QRDefaultParams(String text, QRImageSettings imageSettings) {
         this.text = text;
-        if (x != null) {
-            this.x = x;
-        }
-        if (fileType != null) {
-            this.fileType = fileType;
-        }
-        if (color != null) {
-            this.color = color;
-        }
-    }
-
-    public QRDefaultParams(String text, FileType fileType, Integer x,
-                           ErrorCorrectionLevel correctionLevel, Color color, Color backgroundColor) {
-        this.text = text;
-        this.fileType = fileType;
-        this.x = x;
-        this.correctionLevel = correctionLevel;
-        this.color = color;
-        this.backgroundColor = backgroundColor;
-    }
-
-    public static QRDto fromStrings(String text, String color, String background,
-                                              String type, String x, String correctionLevel
-    ) {
-        String qrText = getMaxStringForGenerate(text);
-        QRDefaultParams params = new QRDefaultParams(qrText);
-        if (color != null) {
-            params.setColor(color);
-        }
-        if (background != null) {
-            params.setBackgroundColor(background);
-        }
-        if (type != null) {
-            params.setFileType(FileType.of(type));
-        }
-        if (x != null) {
-            params.setX(x);
-        }
-        if (correctionLevel != null) {
-            params.setCorrectionLevel(correctionLevel);
-        }
-        return params;
-    }
-
-    public ErrorCorrectionLevel getCorrectionLevel() {
-        return correctionLevel;
-    }
-
-    public void setCorrectionLevel(String correctionLevel) {
-        try {
-            this.correctionLevel = ErrorCorrectionLevel.valueOf(correctionLevel);
-        } catch (Exception ex) {
-            this.correctionLevel = ErrorCorrectionLevel.L;
-        }
-    }
-
-    public Color getBackgroundColor() {
-        return backgroundColor;
-    }
-
-    public void setBackgroundColor(Color backgroundColor) {
-        this.backgroundColor = backgroundColor;
-    }
-
-    public void setBackgroundColor(String backgroundColor) {
-        if (backgroundColor != null) {
-            try {
-                this.backgroundColor = Color.decode(backgroundColor);
-            } catch (Exception ex) {
-                this.backgroundColor = Color.WHITE;
-            }
-        }
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public void setColor(String color) {
-        if (color != null) {
-            try {
-                this.color = Color.decode(color);
-            } catch (Exception ignored) {
-                this.color = Color.BLACK;
-            }
-        }
-    }
-
-    public FileType getFileType() {
-        return fileType;
-    }
-
-    public void setFileType(FileType fileType) {
-        this.fileType = fileType;
-    }
-
-    public void setFileType(String fileType) {
-        if (fileType != null) {
-            try {
-                this.fileType = FileType.valueOf(fileType);
-            } catch (Exception ex) {
-                this.fileType = FileType.PNG;
-            }
-        }
-    }
-
-    public Integer getX() {
-        return x;
-    }
-
-    public void setX(String x) {
-        this.x = getValueForDimension(x);
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    private Integer getValueForDimension(String str) {
-        try {
-            int value = Integer.parseInt(str);
-            if (value <= 50) {
-                return 50;
-            }
-            return Math.min(value, 2048);
-        } catch (Exception ex) {
-            return 300;
-        }
-    }
-
-    private static String getMaxStringForGenerate(String str) {
-        if (str == null || str.isEmpty()) {
-            return "";
-        }
-        int length = str.length();
-        if (length > MAX_TEXT_SIZE) {
-            return str.substring(0, MAX_TEXT_SIZE);
-        }
-        return str;
+        this.imageSettings = imageSettings;
     }
 
     protected static StringBuilder setParam(StringBuilder builder, String param, String value) {
         return builder.append(param).append(Constants.Query.EQUALS).append(value);
+    }
+
+    @Override
+    public String getText() {
+        return this.text;
+    }
+
+    @Override
+    public QRImageSettings getImageSettings() {
+        return this.imageSettings;
     }
 }

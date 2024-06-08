@@ -1,6 +1,9 @@
 package org.eustrosoft.dto;
 
-import org.eustrosoft.FileType;
+import javax.servlet.http.HttpServletRequest;
+
+import static org.eustrosoft.Constants.*;
+import static org.eustrosoft.util.Util.getOrDefault;
 
 public class QRPersonCardParams extends QRDefaultParams {
 
@@ -18,13 +21,36 @@ public class QRPersonCardParams extends QRDefaultParams {
     private String country;
     private String url;
 
-    public QRPersonCardParams(String basicUrl, String phone, String firstName, String lastName, String organization,
+    public static QRPersonCardParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        return new QRPersonCardParams(
+                getOrDefault(request, PARAM_PHONE, EMPTY),
+                getOrDefault(request, PARAM_FIRST_NAME, EMPTY),
+                getOrDefault(request, PARAM_LAST_NAME, EMPTY),
+                getOrDefault(request, PARAM_ORGANIZATION, EMPTY),
+                getOrDefault(request, PARAM_TITLE, EMPTY),
+                getOrDefault(request, PARAM_EMAIL, EMPTY),
+                getOrDefault(request, PARAM_MOBILE_PHONE, EMPTY),
+                getOrDefault(request, PARAM_FAX, EMPTY),
+                getOrDefault(request, PARAM_STREET, EMPTY),
+                getOrDefault(request, PARAM_CITY, EMPTY),
+                getOrDefault(request, PARAM_REGION, EMPTY),
+                getOrDefault(request, PARAM_POSTCODE, EMPTY),
+                getOrDefault(request, PARAM_COUNTRY, EMPTY),
+                getOrDefault(request, PARAM_URL, EMPTY),
+                imageSettings
+        );
+    }
+
+    public QRPersonCardParams(String phone, String firstName, String lastName, String organization,
                               String title, String email, String mobilePhone, String fax, String street, String city,
-                              String region, String postcode, String country, String url) {
+                              String region, String postcode, String country, String url, QRImageSettings imageSettings) {
         super(generatePCard(
                         phone, firstName, lastName, organization, title, email, mobilePhone,
                         fax, street, city, region, postcode, country, url
-                )
+                ), imageSettings
         );
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,24 +65,6 @@ public class QRPersonCardParams extends QRDefaultParams {
         this.postcode = postcode;
         this.country = country;
         this.url = url;
-    }
-
-    public static QRDto fromStrings(
-            String basicUrl, String phone, String firstName, String lastName, String organization,
-            String title, String email, String mobilePhone, String fax, String street, String city,
-            String region, String postcode, String country, String url, String fileType,
-            String x, String correctionLevel, String color, String backgroundColor
-    ) {
-        QRPersonCardParams params = new QRPersonCardParams(
-                basicUrl, phone, firstName, lastName, organization, title, email, mobilePhone,
-                fax, street, city, region, postcode, country, url
-        );
-        params.setColor(color);
-        params.setCorrectionLevel(correctionLevel);
-        params.setX(x);
-        params.setBackgroundColor(backgroundColor);
-        params.setFileType(fileType);
-        return params;
     }
 
     public String getFirstName() {

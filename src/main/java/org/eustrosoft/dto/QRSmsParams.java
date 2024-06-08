@@ -1,25 +1,29 @@
 package org.eustrosoft.dto;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static org.eustrosoft.Constants.EMPTY;
+import static org.eustrosoft.Constants.PARAM_PHONE;
+import static org.eustrosoft.Constants.PARAM_TEXT;
+import static org.eustrosoft.util.Util.getOrDefault;
+
 public class QRSmsParams extends QRDefaultParams {
     private String phone;
 
-    public QRSmsParams(String basicUrl, String phone, String text) {
-        super(generateSms(phone, text));
-        this.phone = phone;
-        this.setText(text);
+    public static QRSmsParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        return new QRSmsParams(
+                getOrDefault(request, PARAM_PHONE, EMPTY),
+                getOrDefault(request, PARAM_TEXT, EMPTY),
+                imageSettings
+        );
     }
 
-    public static QRDto fromStrings(
-            String basicUrl, String phone, String text, String fileType,
-            String x, String correctionLevel, String color, String backgroundColor
-    ) throws Exception {
-        QRSmsParams params = new QRSmsParams(basicUrl, phone, text);
-        params.setColor(color);
-        params.setCorrectionLevel(correctionLevel);
-        params.setX(x);
-        params.setBackgroundColor(backgroundColor);
-        params.setFileType(fileType);
-        return params;
+    public QRSmsParams(String phone, String text, QRImageSettings imageSettings) {
+        super(generateSms(phone, text), imageSettings);
+        this.phone = phone;
     }
 
     public String getPhone() {

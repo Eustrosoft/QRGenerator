@@ -1,6 +1,10 @@
 package org.eustrosoft;
 
+import java.awt.Color;
+
 public class Constants {
+
+    public static final String EMPTY = "";
 
     public static final String PARAM_Q = "q";
     public static final String PARAM_P = "p";
@@ -26,6 +30,9 @@ public class Constants {
     public static final String PARAM_SSID = "ssid";
     public static final String PARAM_PASSWORD = "password";
     public static final String PARAM_ENCRYPTION = "encryption";
+    public static final String PARAM_LATITUDE = "latitude";
+    public static final String PARAM_LONGITUDE = "longitude";
+    public static final String PARAM_TYPE = "type";
 
     public static final String PARAM_TEXT = "text";
     public static final String PARAM_COLOR = "color";
@@ -34,16 +41,34 @@ public class Constants {
     public static final String PARAM_X = "x";
     public static final String PARAM_CORRECTION_LEVEL = "correctionLevel";
 
+    public static final String MAP_URL_FORMAT = "https://yandex.ru/maps/?ll=%f&%f";
+
+    // todo: move to web.xml later and use it
+    public static final Integer MAX_QR_TEXT_SIZE = 1900;
+
     public static class Default {
+        public static final Integer IMAGE_SIZE = 165;
         public static final String BASIC_URL = "http://qr.qxyz.ru";
-        public static final String IMAGE_SIZE = "165";
-        public static final String COLOR = "#000000";
-        public static final String BACKGROUND = "#FFFFFF";
+        public static final Color COLOR = Color.BLACK;
+        public static final Color BACKGROUND = Color.WHITE;
     }
 
     public static class Query {
         public static final String AND = "&";
         public static final String EQUALS = "=";
         public static final String QUESTION = "?";
+    }
+
+    public enum QRType {
+        TEXT, URL, PHONE, SMS,
+        EMAIL, CONTACT, WIFI, LOCATION;
+
+        public static QRType fromString(String value) {
+            if (value == null || value.isEmpty()) {
+                return null;
+            }
+            String valUpper = value.toUpperCase();
+            return QRType.valueOf(valUpper);
+        }
     }
 }

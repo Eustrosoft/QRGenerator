@@ -1,23 +1,26 @@
 package org.eustrosoft.dto;
 
+import javax.servlet.http.HttpServletRequest;
+
+import static org.eustrosoft.Constants.EMPTY;
+import static org.eustrosoft.Constants.PARAM_URL;
+import static org.eustrosoft.util.Util.getOrDefault;
+
 public class QRUrlParams extends QRDefaultParams {
     private String url;
 
-    public QRUrlParams(String basicUrl, String url) {
-        super(url);
+    public static QRUrlParams fromRequest(
+            HttpServletRequest request,
+            QRImageSettings imageSettings
+    ) throws Exception {
+        return new QRUrlParams(
+                getOrDefault(request, PARAM_URL, EMPTY),
+                imageSettings
+        );
     }
 
-    public static QRDto fromStrings(
-            String basicUrl, String url, String fileType,
-            String x, String correctionLevel, String color, String backgroundColor
-    ) throws Exception {
-        QRUrlParams params = new QRUrlParams(basicUrl, url);
-        params.setColor(color);
-        params.setCorrectionLevel(correctionLevel);
-        params.setX(x);
-        params.setBackgroundColor(backgroundColor);
-        params.setFileType(fileType);
-        return params;
+    public QRUrlParams(String url, QRImageSettings imageSettings) {
+        super(url, imageSettings);
     }
 
     public String getUrl() {
