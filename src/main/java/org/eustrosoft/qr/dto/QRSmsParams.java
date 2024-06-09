@@ -1,11 +1,11 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.eustrosoft.Constants.EMPTY;
-import static org.eustrosoft.Constants.PARAM_PHONE;
-import static org.eustrosoft.Constants.PARAM_TEXT;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.qr.Constants.EMPTY;
+import static org.eustrosoft.qr.Constants.PARAM_PHONE;
+import static org.eustrosoft.qr.Constants.PARAM_TEXT;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
 
 public class QRSmsParams extends QRDefaultParams {
     private String phone;

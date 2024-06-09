@@ -1,9 +1,9 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.eustrosoft.Constants.*;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.qr.Constants.*;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
 
 public class QRPersonCardParams extends QRDefaultParams {
 

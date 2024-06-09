@@ -1,16 +1,16 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
-import org.eustrosoft.Constants;
-import org.eustrosoft.WebParams;
+import org.eustrosoft.qr.Constants;
+import org.eustrosoft.qr.WebParams;
 
-import static org.eustrosoft.Constants.FORMAT_DISTANCE;
-import static org.eustrosoft.Constants.FORMAT_LATITUDE;
-import static org.eustrosoft.Constants.FORMAT_LONGITUDE;
-import static org.eustrosoft.Constants.PARAM_DISTANCE;
-import static org.eustrosoft.Constants.PARAM_LATITUDE;
-import static org.eustrosoft.Constants.PARAM_LONGITUDE;
-import static org.eustrosoft.util.Util.getOrDefaultExtract;
+import static org.eustrosoft.qr.Constants.FORMAT_DISTANCE;
+import static org.eustrosoft.qr.Constants.FORMAT_LATITUDE;
+import static org.eustrosoft.qr.Constants.FORMAT_LONGITUDE;
+import static org.eustrosoft.qr.Constants.PARAM_DISTANCE;
+import static org.eustrosoft.qr.Constants.PARAM_LATITUDE;
+import static org.eustrosoft.qr.Constants.PARAM_LONGITUDE;
+import static org.eustrosoft.qr.util.Util.getOrDefaultExtract;
 
 public class QRLocationParams extends QRDefaultParams {
     private Float longitude;

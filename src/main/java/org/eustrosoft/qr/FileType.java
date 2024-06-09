@@ -1,4 +1,4 @@
-package org.eustrosoft;
+package org.eustrosoft.qr;
 
 public enum FileType {
     SVG("svg"),

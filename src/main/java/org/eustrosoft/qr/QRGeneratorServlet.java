@@ -1,4 +1,4 @@
-package org.eustrosoft;
+package org.eustrosoft.qr;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -9,9 +9,9 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.eustrosoft.dto.QRDto;
-import org.eustrosoft.dto.QREustrosoftParams;
-import org.eustrosoft.dto.QRImageSettings;
+import org.eustrosoft.qr.dto.QRDto;
+import org.eustrosoft.qr.dto.QREustrosoftParams;
+import org.eustrosoft.qr.dto.QRImageSettings;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 

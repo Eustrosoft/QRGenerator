@@ -1,33 +1,126 @@
 # QR code generating servlet
 
-web.xml - change config
+## Main concept:
+This project allows to start server part with java server side for generating qr-images with different variations \
+and settings \
 
-## Parameters for servlet: 
-- text - text encoded url that will be placed in qr
-- color - color of qr code
-- background - background color
-- fileType - type of output file. Supported formats: (SVG("svg"), PNG("png"), WBMP("wbmp"), JPG("jpg"), JPEG("jpeg"))
-- correctionLevel - level of correction. Supported: (L, M, Q, H)
-- x - size for sqared image 
+All parameters need to be passed through `GET` parameters to servlet
 
-### New params for Eustrosoft part
+## Project setup:
+- web.xml - change config
+- Makefile/pom - project compiling
+- If you use makefile -> paste libraries in lib/ directory in root of the project
 
-QRDto was added as standard interface for generating qr codes params
+## Dependencies:
+- google xing-core 3.4.0
+- jfreesvg 3.4.3
+- javax.servlet-api 4.0.0
 
-Added QREustrosoftParams class to manipulate new parameters, as q, p, d, site
+## Generation out system QR codes:
+As example this type of url: https://qr.qxyz.ru/?q=123&p=123
 
-New parameter was added in web.xml BASIC_REDIRECT_URL to set url builder first path, that will connect the other
-
-Logic to create qr:
-
-```
-If has `q` param - generation will fo through EustrosoftPath. Project has QRParamFactory to check the way to build QRParams
-Other params are optional for eustrosoft and has default values:
- - Size (165)
- - Color (black)
- - Background (white)
- - Error correction (L)
- - File type (png)
+```ts
+Parameters:
+  q: String;
+  p?: String;
+  d?: String;
+  site?:String;
 ```
 
-Other way - fill `text` param.
+## Generation QR by type:
+`['TEXT', 'URL', 'PHONE', 'SMS', 'EMAIL', 'CONTACT', 'WIFI', 'LOCATION']`
+
+- Text generation
+```ts
+Parameters:
+  text: String;
+  type: TEXT;
+```
+
+- URL generation
+```ts
+Parameters:
+  url: String;
+  type: URL;
+```
+
+- Phone number
+```ts
+Parameters:
+  phone: String;
+  type: PHONE;
+```
+
+- SMS
+```ts
+Parameters:
+  phone: String; (валидатор для номеров)
+  text: String;
+  type: SMS;
+```
+
+- Email message
+```ts
+Parameters:
+  email: String;
+  subject: String;
+  text: String;
+  type: EMAIL;
+```
+
+- Contacts
+```ts
+Parameters:
+  firstName: String;
+  lastName?: String;
+  organization?: String;
+  title?: String;
+  email?: String;
+  phone?: String;
+  mobilePhone?: String; (same)
+  fax?: String;
+  street?: String;
+  city?: String;
+  region?: String;
+  postcode?: String;
+  country?: String; 
+  url?: String;
+  type: CONTACT;
+```
+
+- WiFi Connection
+```ts
+Parameters:
+  ssid: String;
+  password?: String;
+  encryption?: WEP | WPA;
+  type: WIFI;
+```
+_____
+
+- Location Generating
+```ts
+
+Parameters:
+  latitude: float; (dot - separator)
+  longitude: float;
+  distance: integer;
+  type: LOCATION;
+```
+
+## Picture Configuration Parameters:
+
+```ts
+color?: String; (формат hex)
+background?: String; (формат hex)
+fileType?: FileType; 
+x?: Integer; // размер картинки в px (макс - 2048px)
+correctionLevel?: CorrectionLevel;
+
+FileType: [svg, png, jpg, jpeg]
+CorrectionLevel: [L, M, Q, H] 
+```
+
+### CorrectionLevel explaining:
+
+![Image](https://github.com/Eustrosoft/Documentation/assets/30436662/d2b6b346-dbc1-437a-9c24-ff0d1f4c1ce0)

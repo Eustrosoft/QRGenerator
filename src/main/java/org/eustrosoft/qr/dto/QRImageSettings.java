@@ -1,20 +1,20 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import javax.servlet.http.HttpServletRequest;
-import org.eustrosoft.Constants;
-import org.eustrosoft.FileType;
-import org.eustrosoft.WebParams;
+import org.eustrosoft.qr.Constants;
+import org.eustrosoft.qr.FileType;
+import org.eustrosoft.qr.WebParams;
 
 import java.awt.Color;
 
-import static org.eustrosoft.Constants.PARAM_BACKGROUND;
-import static org.eustrosoft.Constants.PARAM_COLOR;
-import static org.eustrosoft.Constants.PARAM_CORRECTION_LEVEL;
-import static org.eustrosoft.Constants.PARAM_FILE_TYPE;
-import static org.eustrosoft.Constants.PARAM_X;
-import static org.eustrosoft.util.Util.getOrDefaultEnum;
-import static org.eustrosoft.util.Util.getOrDefaultExtract;
+import static org.eustrosoft.qr.Constants.PARAM_BACKGROUND;
+import static org.eustrosoft.qr.Constants.PARAM_COLOR;
+import static org.eustrosoft.qr.Constants.PARAM_CORRECTION_LEVEL;
+import static org.eustrosoft.qr.Constants.PARAM_FILE_TYPE;
+import static org.eustrosoft.qr.Constants.PARAM_X;
+import static org.eustrosoft.qr.util.Util.getOrDefaultEnum;
+import static org.eustrosoft.qr.util.Util.getOrDefaultExtract;
 
 public class QRImageSettings {
     private String baseUrl;

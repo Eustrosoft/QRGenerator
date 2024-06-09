@@ -35,7 +35,7 @@
 
     <servlet>
         <servlet-name>QRGenerating</servlet-name>
-        <servlet-class>org.eustrosoft.QRGeneratorServlet</servlet-class>
+        <servlet-class>org.eustrosoft.qr.QRGeneratorServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

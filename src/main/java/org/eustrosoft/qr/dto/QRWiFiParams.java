@@ -1,13 +1,13 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.eustrosoft.Constants.EMPTY;
-import static org.eustrosoft.Constants.PARAM_ENCRYPTION;
-import static org.eustrosoft.Constants.PARAM_PASSWORD;
-import static org.eustrosoft.Constants.PARAM_SSID;
-import static org.eustrosoft.util.Util.getOrDefault;
-import static org.eustrosoft.util.Util.getOrDefaultEnum;
+import static org.eustrosoft.qr.Constants.EMPTY;
+import static org.eustrosoft.qr.Constants.PARAM_ENCRYPTION;
+import static org.eustrosoft.qr.Constants.PARAM_PASSWORD;
+import static org.eustrosoft.qr.Constants.PARAM_SSID;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
+import static org.eustrosoft.qr.util.Util.getOrDefaultEnum;
 
 public class QRWiFiParams extends QRDefaultParams {
     private String ssid;

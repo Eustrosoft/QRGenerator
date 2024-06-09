@@ -1,12 +1,12 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static org.eustrosoft.Constants.EMPTY;
-import static org.eustrosoft.Constants.PARAM_EMAIL;
-import static org.eustrosoft.Constants.PARAM_SUBJECT;
-import static org.eustrosoft.Constants.PARAM_TEXT;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.qr.Constants.EMPTY;
+import static org.eustrosoft.qr.Constants.PARAM_EMAIL;
+import static org.eustrosoft.qr.Constants.PARAM_SUBJECT;
+import static org.eustrosoft.qr.Constants.PARAM_TEXT;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
 
 public class QREmailParams extends QRDefaultParams {
     private String email;

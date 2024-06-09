@@ -1,24 +1,24 @@
-package org.eustrosoft;
+package org.eustrosoft.qr;
 
 import javax.servlet.http.HttpServletRequest;
-import org.eustrosoft.dto.QRDefaultParams;
-import org.eustrosoft.dto.QRDto;
-import org.eustrosoft.dto.QREmailParams;
-import org.eustrosoft.dto.QREustrosoftParams;
-import org.eustrosoft.dto.QRImageSettings;
-import org.eustrosoft.dto.QRLocationParams;
-import org.eustrosoft.dto.QRPersonCardParams;
-import org.eustrosoft.dto.QRPhoneNumberParams;
-import org.eustrosoft.dto.QRSmsParams;
-import org.eustrosoft.dto.QRUrlParams;
-import org.eustrosoft.dto.QRWiFiParams;
+import org.eustrosoft.qr.dto.QRDefaultParams;
+import org.eustrosoft.qr.dto.QRDto;
+import org.eustrosoft.qr.dto.QREmailParams;
+import org.eustrosoft.qr.dto.QREustrosoftParams;
+import org.eustrosoft.qr.dto.QRImageSettings;
+import org.eustrosoft.qr.dto.QRLocationParams;
+import org.eustrosoft.qr.dto.QRPersonCardParams;
+import org.eustrosoft.qr.dto.QRPhoneNumberParams;
+import org.eustrosoft.qr.dto.QRSmsParams;
+import org.eustrosoft.qr.dto.QRUrlParams;
+import org.eustrosoft.qr.dto.QRWiFiParams;
 
-import static org.eustrosoft.Constants.PARAM_D;
-import static org.eustrosoft.Constants.PARAM_P;
-import static org.eustrosoft.Constants.PARAM_Q;
-import static org.eustrosoft.Constants.PARAM_SITE;
-import static org.eustrosoft.Constants.PARAM_TYPE;
-import static org.eustrosoft.Constants.QRType;
+import static org.eustrosoft.qr.Constants.PARAM_D;
+import static org.eustrosoft.qr.Constants.PARAM_P;
+import static org.eustrosoft.qr.Constants.PARAM_Q;
+import static org.eustrosoft.qr.Constants.PARAM_SITE;
+import static org.eustrosoft.qr.Constants.PARAM_TYPE;
+import static org.eustrosoft.qr.Constants.QRType;
 
 public final class QRParamFactory {
 

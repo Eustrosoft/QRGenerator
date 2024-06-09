@@ -1,10 +1,10 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
-import org.eustrosoft.Constants;
+import org.eustrosoft.qr.Constants;
 
-import static org.eustrosoft.Constants.PARAM_TEXT;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.qr.Constants.PARAM_TEXT;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
 
 public class QRDefaultParams implements QRDto {
     private String text = "";

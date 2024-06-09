@@ -1,8 +1,7 @@
-package org.eustrosoft.util;
+package org.eustrosoft.qr.util;
 
 import javax.servlet.http.HttpServletRequest;
 
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Util {

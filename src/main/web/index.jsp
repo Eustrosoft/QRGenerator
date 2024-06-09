@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="org.eustrosoft.FileType" %>
+<%@ page import="org.eustrosoft.qr.FileType" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.io.UnsupportedEncodingException" %>
 <%@ page import="java.util.ArrayList" %>

@@ -1,4 +1,4 @@
-package org.eustrosoft;
+package org.eustrosoft.qr;
 
 import javax.servlet.http.HttpServletRequest;
 

@@ -1,20 +1,14 @@
-package org.eustrosoft.dto;
+package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
-import org.eustrosoft.Constants;
-import org.eustrosoft.FileType;
+import org.eustrosoft.qr.Constants;
 
-import java.awt.Color;
-
-import static org.eustrosoft.Constants.EMPTY;
-import static org.eustrosoft.Constants.PARAM_D;
-import static org.eustrosoft.Constants.PARAM_EMAIL;
-import static org.eustrosoft.Constants.PARAM_P;
-import static org.eustrosoft.Constants.PARAM_Q;
-import static org.eustrosoft.Constants.PARAM_SITE;
-import static org.eustrosoft.Constants.PARAM_SUBJECT;
-import static org.eustrosoft.Constants.PARAM_TEXT;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.qr.Constants.EMPTY;
+import static org.eustrosoft.qr.Constants.PARAM_D;
+import static org.eustrosoft.qr.Constants.PARAM_P;
+import static org.eustrosoft.qr.Constants.PARAM_Q;
+import static org.eustrosoft.qr.Constants.PARAM_SITE;
+import static org.eustrosoft.qr.util.Util.getOrDefault;
 
 public class QREustrosoftParams extends QRDefaultParams {
     private String q;
