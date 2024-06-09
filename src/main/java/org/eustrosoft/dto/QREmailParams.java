@@ -15,7 +15,7 @@ public class QREmailParams extends QRDefaultParams {
     public static QREmailParams fromRequest(
             HttpServletRequest request,
             QRImageSettings imageSettings
-    ) {
+    ) throws Exception {
         return new QREmailParams(
                 getOrDefault(request, PARAM_EMAIL, EMPTY),
                 getOrDefault(request, PARAM_SUBJECT, EMPTY),

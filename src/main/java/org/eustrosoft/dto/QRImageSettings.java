@@ -13,7 +13,8 @@ import static org.eustrosoft.Constants.PARAM_COLOR;
 import static org.eustrosoft.Constants.PARAM_CORRECTION_LEVEL;
 import static org.eustrosoft.Constants.PARAM_FILE_TYPE;
 import static org.eustrosoft.Constants.PARAM_X;
-import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.util.Util.getOrDefaultEnum;
+import static org.eustrosoft.util.Util.getOrDefaultExtract;
 
 public class QRImageSettings {
     private String baseUrl;
@@ -23,15 +24,29 @@ public class QRImageSettings {
     private FileType fileType;
     private ErrorCorrectionLevel errorCorrectionLevel;
 
-    public static QRImageSettings extractFromRequest(HttpServletRequest req) {
+    public static QRImageSettings extractFromRequest(HttpServletRequest req) throws IllegalArgumentException {
         QRImageSettings settings = new QRImageSettings();
-        settings.setX(getOrDefault(req, PARAM_X, Constants.Default.IMAGE_SIZE));
-        settings.setFileType(getOrDefault(req, PARAM_FILE_TYPE, FileType.SVG));
-        settings.setErrorCorrectionLevel(getOrDefault(req, PARAM_CORRECTION_LEVEL, ErrorCorrectionLevel.L));
-        settings.setColor(getOrDefault(req, PARAM_COLOR, Constants.Default.COLOR));
-        settings.setBackgroundColor(getOrDefault(req, PARAM_BACKGROUND, Constants.Default.BACKGROUND));
-        settings.setBaseUrl(WebParams.getString(req, WebParams.BASIC_REDIRECT_URL));
-        return settings;
+        try {
+            settings.setX(
+                    getOrDefaultExtract(req, PARAM_X, Constants.Default.IMAGE_SIZE, Integer::parseInt)
+            );
+            settings.setFileType(
+                    getOrDefaultEnum(req, PARAM_FILE_TYPE, FileType.class, FileType.SVG)
+            );
+            settings.setErrorCorrectionLevel(
+                    getOrDefaultEnum(req, PARAM_CORRECTION_LEVEL, ErrorCorrectionLevel.class, ErrorCorrectionLevel.L)
+            );
+            settings.setColor(
+                    getOrDefaultExtract(req, PARAM_COLOR, Constants.Default.COLOR, Color::decode)
+            );
+            settings.setBackgroundColor(
+                    getOrDefaultExtract(req, PARAM_BACKGROUND, Constants.Default.BACKGROUND, Color::decode)
+            );
+            settings.setBaseUrl(WebParams.getString(req, WebParams.BASIC_REDIRECT_URL, Constants.Default.BASIC_URL));
+            return settings;
+        } catch (Exception ex) {
+            throw new IllegalArgumentException("Passed illegal qr image settings argument");
+        }
     }
 
     public QRImageSettings() {
@@ -48,12 +63,12 @@ public class QRImageSettings {
             FileType fileType, ErrorCorrectionLevel errorCorrectionLevel,
             String baseUrl
     ) {
-        this.x = x;
-        this.color = color;
-        this.backgroundColor = backgroundColor;
-        this.fileType = fileType;
-        this.errorCorrectionLevel = errorCorrectionLevel;
-        this.baseUrl = baseUrl;
+        setX(x);
+        setColor(color);
+        setBackgroundColor(backgroundColor);
+        setFileType(fileType);
+        setErrorCorrectionLevel(errorCorrectionLevel);
+        setBaseUrl(baseUrl);
     }
 
     public String getBaseUrl() {

@@ -7,6 +7,7 @@ import static org.eustrosoft.Constants.PARAM_ENCRYPTION;
 import static org.eustrosoft.Constants.PARAM_PASSWORD;
 import static org.eustrosoft.Constants.PARAM_SSID;
 import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.util.Util.getOrDefaultEnum;
 
 public class QRWiFiParams extends QRDefaultParams {
     private String ssid;
@@ -20,7 +21,7 @@ public class QRWiFiParams extends QRDefaultParams {
         return new QRWiFiParams(
                 getOrDefault(request, PARAM_SSID, EMPTY),
                 getOrDefault(request, PARAM_PASSWORD, EMPTY),
-                getOrDefault(request, PARAM_ENCRYPTION, Encryption.WPA),
+                getOrDefaultEnum(request, PARAM_ENCRYPTION, Encryption.class, Encryption.WPA),
                 imageSettings
         );
     }

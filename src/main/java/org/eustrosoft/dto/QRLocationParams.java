@@ -1,48 +1,57 @@
 package org.eustrosoft.dto;
 
 import javax.servlet.http.HttpServletRequest;
+import org.eustrosoft.Constants;
+import org.eustrosoft.WebParams;
 
-import static org.eustrosoft.Constants.EMPTY;
+import java.net.URI;
+
 import static org.eustrosoft.Constants.MAP_URL_FORMAT;
-import static org.eustrosoft.Constants.PARAM_ENCRYPTION;
+import static org.eustrosoft.Constants.PARAM_DISTANCE;
 import static org.eustrosoft.Constants.PARAM_LATITUDE;
 import static org.eustrosoft.Constants.PARAM_LONGITUDE;
-import static org.eustrosoft.Constants.PARAM_PASSWORD;
-import static org.eustrosoft.Constants.PARAM_SSID;
 import static org.eustrosoft.util.Util.getOrDefault;
+import static org.eustrosoft.util.Util.getOrDefaultExtract;
 
 public class QRLocationParams extends QRDefaultParams {
     private Float longitude;
     private Float latitude;
+    private Integer distance;
 
     public static QRLocationParams fromRequest(
             HttpServletRequest request,
             QRImageSettings imageSettings
     ) throws Exception {
         return new QRLocationParams(
-                getOrDefault(request, PARAM_LONGITUDE, 0.0f),
-                getOrDefault(request, PARAM_LATITUDE, 0.0f),
+                WebParams.getFloat(
+                        request, WebParams.DEFAULT_MAP_LONGITUDE,
+                        getOrDefaultExtract(request, PARAM_LONGITUDE, Constants.Default.LONGITUDE, Float::parseFloat)
+                ),
+                WebParams.getFloat(
+                        request, WebParams.DEFAULT_MAP_LATITUDE,
+                        getOrDefaultExtract(request, PARAM_LATITUDE, Constants.Default.LATITUDE, Float::parseFloat)
+                ),
+                WebParams.getInteger(
+                        request, WebParams.DEFAULT_MAP_DISTANCE,
+                        getOrDefaultExtract(request, PARAM_DISTANCE, Constants.Default.DISTANCE, Integer::parseInt)
+                ),
                 imageSettings
         );
     }
 
     public QRLocationParams(
-            Float longitude, Float latitude,
+            Float longitude, Float latitude, Integer distance,
             QRImageSettings imageSettings
     ) {
-        super(generateLocation(longitude, latitude), imageSettings);
+        super(generateLocation(longitude, latitude, distance), imageSettings);
         this.latitude = latitude;
         this.longitude = longitude;
+        this.distance = distance;
     }
 
-    private static String generateLocation(Float longitude, Float latitude) {
-        if (longitude == null) {
-            longitude = 0.0f;
-        }
-        if (latitude == null) {
-            latitude = 0.0f;
-        }
-        return String.format(MAP_URL_FORMAT, longitude, latitude);
+    private static String generateLocation(Float longitude, Float latitude, Integer distance) {
+        String coordFormat = longitude + "%2C" + latitude;
+        return String.format(MAP_URL_FORMAT, coordFormat, distance);
     }
 
     public Float getLongitude() {
@@ -59,5 +68,13 @@ public class QRLocationParams extends QRDefaultParams {
 
     public void setLatitude(Float latitude) {
         this.latitude = latitude;
+    }
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
     }
 }

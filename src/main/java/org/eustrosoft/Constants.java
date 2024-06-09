@@ -32,6 +32,7 @@ public class Constants {
     public static final String PARAM_ENCRYPTION = "encryption";
     public static final String PARAM_LATITUDE = "latitude";
     public static final String PARAM_LONGITUDE = "longitude";
+    public static final String PARAM_DISTANCE = "distance";
     public static final String PARAM_TYPE = "type";
 
     public static final String PARAM_TEXT = "text";
@@ -41,7 +42,7 @@ public class Constants {
     public static final String PARAM_X = "x";
     public static final String PARAM_CORRECTION_LEVEL = "correctionLevel";
 
-    public static final String MAP_URL_FORMAT = "https://yandex.ru/maps/?ll=%f&%f";
+    public static final String MAP_URL_FORMAT = "https://yandex.ru/maps?ll=%s&z=%d";
 
     // todo: move to web.xml later and use it
     public static final Integer MAX_QR_TEXT_SIZE = 1900;
@@ -51,6 +52,10 @@ public class Constants {
         public static final String BASIC_URL = "http://qr.qxyz.ru";
         public static final Color COLOR = Color.BLACK;
         public static final Color BACKGROUND = Color.WHITE;
+        
+        public static final Float LATITUDE = 55.755863f;
+        public static final Float LONGITUDE = 37.617700f;
+        public static final Integer DISTANCE = 15;
     }
 
     public static class Query {
@@ -68,7 +73,11 @@ public class Constants {
                 return null;
             }
             String valUpper = value.toUpperCase();
-            return QRType.valueOf(valUpper);
+            try {
+                return QRType.valueOf(valUpper);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid QR Type: " + valUpper);
+            }
         }
     }
 }

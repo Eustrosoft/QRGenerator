@@ -14,6 +14,19 @@
         <param-value>http://qr.qxyz.ru</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>DEFAULT_MAP_LATITUDE</param-name>
+        <param-value>55.755863</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_MAP_LONGITUDE</param-name>
+        <param-value>37.617700</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_MAP_DISTANCE</param-name>
+        <param-value>12</param-value>
+    </context-param>
+
     <servlet>
         <servlet-name>QRGenerating</servlet-name>
         <servlet-class>org.eustrosoft.QRGeneratorServlet</servlet-class>
