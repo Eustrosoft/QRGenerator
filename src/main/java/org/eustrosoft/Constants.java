@@ -42,7 +42,9 @@ public class Constants {
     public static final String PARAM_X = "x";
     public static final String PARAM_CORRECTION_LEVEL = "correctionLevel";
 
-    public static final String MAP_URL_FORMAT = "https://yandex.ru/maps?ll=%s&z=%d";
+    public static final String FORMAT_LONGITUDE = "${LONGITUDE}";
+    public static final String FORMAT_LATITUDE = "${LATITUDE}";
+    public static final String FORMAT_DISTANCE = "${DISTANCE}";
 
     // todo: move to web.xml later and use it
     public static final Integer MAX_QR_TEXT_SIZE = 1900;
@@ -52,9 +54,11 @@ public class Constants {
         public static final String BASIC_URL = "http://qr.qxyz.ru";
         public static final Color COLOR = Color.BLACK;
         public static final Color BACKGROUND = Color.WHITE;
-        
-        public static final Float LATITUDE = 55.755863f;
-        public static final Float LONGITUDE = 37.617700f;
+
+        public static final String MAP_URL_FORMAT = "https://yandex.ru/maps?ll=${LATITUDE}%2C${LONGITUDE}&z=${DISTANCE}";
+
+        public static final Float LATITUDE = 37.617700f;
+        public static final Float LONGITUDE = 55.755863f;
         public static final Integer DISTANCE = 15;
     }
 

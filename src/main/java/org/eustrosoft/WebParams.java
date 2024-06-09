@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public final class WebParams {
     public final static String BASIC_REDIRECT_URL = "BASIC_REDIRECT_URL";
+    public final static String DEFAULT_MAP_API = "DEFAULT_MAP_API";
     public final static String DEFAULT_MAP_LATITUDE = "DEFAULT_MAP_LATITUDE";
     public final static String DEFAULT_MAP_LONGITUDE = "DEFAULT_MAP_LONGITUDE";
     public final static String DEFAULT_MAP_DISTANCE = "DEFAULT_MAP_DISTANCE";

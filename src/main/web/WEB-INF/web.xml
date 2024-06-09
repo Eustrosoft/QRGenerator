@@ -14,13 +14,19 @@
         <param-value>http://qr.qxyz.ru</param-value>
     </context-param>
 
+    <!-- Map generating parameters -->
+    <context-param>
+        <param-name>DEFAULT_MAP_API</param-name>
+<!--        <param-value>https://maps.google.com/local?q=${LATITUDE},${LONGITUDE}</param-value>-->
+         <param-value>https://yandex.ru/maps?ll=${LATITUDE}%2C${LONGITUDE}&amp;z=${DISTANCE}</param-value>
+    </context-param>
     <context-param>
         <param-name>DEFAULT_MAP_LATITUDE</param-name>
-        <param-value>55.755863</param-value>
+        <param-value>37.617700</param-value>
     </context-param>
     <context-param>
         <param-name>DEFAULT_MAP_LONGITUDE</param-name>
-        <param-value>37.617700</param-value>
+        <param-value>55.755863</param-value>
     </context-param>
     <context-param>
         <param-name>DEFAULT_MAP_DISTANCE</param-name>
