@@ -34,8 +34,7 @@ public class Util {
     }
 
     public static <T extends Enum<T>> T getOrDefaultEnum(
-            HttpServletRequest request, String param,
-            Class<T> clazz, T defaultValue
+            HttpServletRequest request, String param, T defaultValue
     ) throws Exception {
         if (request == null) {
             return null;
@@ -44,7 +43,7 @@ public class Util {
         if (parameter == null) {
             return defaultValue;
         }
-        return Enum.valueOf(clazz, parameter);
+        return Enum.valueOf(defaultValue.getDeclaringClass(), parameter);
     }
 
     public static boolean isAllEmpty(String... strings) {

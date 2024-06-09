@@ -1,5 +1,7 @@
 package org.eustrosoft.qr;
 
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+
 import java.awt.Color;
 
 public class Constants {
@@ -46,14 +48,16 @@ public class Constants {
     public static final String FORMAT_LATITUDE = "${LATITUDE}";
     public static final String FORMAT_DISTANCE = "${DISTANCE}";
 
-    // todo: move to web.xml later and use it
-    public static final Integer MAX_QR_TEXT_SIZE = 1900;
-
     public static class Default {
+        public static final Integer MAX_QR_TEXT_SIZE = 1900;
+
         public static final Integer IMAGE_SIZE = 165;
+        public static final Integer IMAGE_MAX_SIZE = 2048;
         public static final String BASIC_URL = "http://qr.qxyz.ru";
         public static final Color COLOR = Color.BLACK;
         public static final Color BACKGROUND = Color.WHITE;
+        public static final FileType FILE_TYPE = FileType.SVG;
+        public static final ErrorCorrectionLevel ERROR_CORRECTION = ErrorCorrectionLevel.M;
 
         public static final String MAP_URL_FORMAT = "https://yandex.ru/maps?ll=${LATITUDE}%2C${LONGITUDE}&z=${DISTANCE}";
 

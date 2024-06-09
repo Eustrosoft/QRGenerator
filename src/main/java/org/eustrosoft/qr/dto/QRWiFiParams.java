@@ -21,7 +21,7 @@ public class QRWiFiParams extends QRDefaultParams {
         return new QRWiFiParams(
                 getOrDefault(request, PARAM_SSID, EMPTY),
                 getOrDefault(request, PARAM_PASSWORD, EMPTY),
-                getOrDefaultEnum(request, PARAM_ENCRYPTION, Encryption.class, Encryption.WPA),
+                getOrDefaultEnum(request, PARAM_ENCRYPTION, Encryption.WPA),
                 imageSettings
         );
     }

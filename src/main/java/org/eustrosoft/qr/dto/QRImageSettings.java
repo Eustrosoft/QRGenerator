@@ -19,6 +19,7 @@ import static org.eustrosoft.qr.util.Util.getOrDefaultExtract;
 public class QRImageSettings {
     private String baseUrl;
     private Integer x;
+    private Integer maxQrSize;
     private Color color;
     private Color backgroundColor;
     private FileType fileType;
@@ -27,20 +28,41 @@ public class QRImageSettings {
     public static QRImageSettings extractFromRequest(HttpServletRequest req) throws IllegalArgumentException {
         QRImageSettings settings = new QRImageSettings();
         try {
+            settings.setMaxQrSize(
+                    WebParams.getInteger(req, WebParams.DEFAULT_QR_MAX_SIZE, Constants.Default.IMAGE_MAX_SIZE)
+            );
             settings.setX(
-                    getOrDefaultExtract(req, PARAM_X, Constants.Default.IMAGE_SIZE, Integer::parseInt)
+                    getOrDefaultExtract(
+                            req, PARAM_X,
+                            WebParams.getInteger(req, WebParams.DEFAULT_QR_SIZE, Constants.Default.IMAGE_SIZE),
+                            Integer::parseInt
+                    )
             );
             settings.setFileType(
-                    getOrDefaultEnum(req, PARAM_FILE_TYPE, FileType.class, FileType.SVG)
+                    getOrDefaultEnum(
+                            req, PARAM_FILE_TYPE,
+                            WebParams.getEnum(req, WebParams.DEFAULT_QR_FILE_TYPE, Constants.Default.FILE_TYPE)
+                    )
             );
             settings.setErrorCorrectionLevel(
-                    getOrDefaultEnum(req, PARAM_CORRECTION_LEVEL, ErrorCorrectionLevel.class, ErrorCorrectionLevel.L)
+                    getOrDefaultEnum(
+                            req, PARAM_CORRECTION_LEVEL,
+                            WebParams.getEnum(req, WebParams.DEFAULT_QR_CORRECTION_LEVEL, Constants.Default.ERROR_CORRECTION)
+                    )
             );
             settings.setColor(
-                    getOrDefaultExtract(req, PARAM_COLOR, Constants.Default.COLOR, Color::decode)
+                    getOrDefaultExtract(
+                            req, PARAM_COLOR,
+                            Color.decode(WebParams.getString(req, WebParams.DEFAULT_QR_COLOR, Constants.Default.COLOR.toString())),
+                            Color::decode
+                    )
             );
             settings.setBackgroundColor(
-                    getOrDefaultExtract(req, PARAM_BACKGROUND, Constants.Default.BACKGROUND, Color::decode)
+                    getOrDefaultExtract(
+                            req, PARAM_BACKGROUND,
+                            Color.decode(WebParams.getString(req, WebParams.DEFAULT_QR_BACKGROUND, Constants.Default.BACKGROUND.toString())),
+                            Color::decode
+                    )
             );
             settings.setBaseUrl(WebParams.getString(req, WebParams.BASIC_REDIRECT_URL, Constants.Default.BASIC_URL));
             return settings;
@@ -51,24 +73,34 @@ public class QRImageSettings {
 
     public QRImageSettings() {
         this.x = 165;
-        this.color = Color.BLACK;
-        this.backgroundColor = Color.WHITE;
-        this.fileType = FileType.SVG;
-        this.errorCorrectionLevel = ErrorCorrectionLevel.M;
+        this.maxQrSize = Constants.Default.IMAGE_MAX_SIZE;
+        this.color = Constants.Default.COLOR;
+        this.backgroundColor = Constants.Default.BACKGROUND;
+        this.fileType = Constants.Default.FILE_TYPE;
+        this.errorCorrectionLevel = Constants.Default.ERROR_CORRECTION;
         this.baseUrl = Constants.Default.BASIC_URL;
     }
 
     public QRImageSettings(
-            Integer x, Color color, Color backgroundColor,
+            Integer x, Integer maxQrSize, Color color, Color backgroundColor,
             FileType fileType, ErrorCorrectionLevel errorCorrectionLevel,
             String baseUrl
     ) {
         setX(x);
+        setMaxQrSize(maxQrSize);
         setColor(color);
         setBackgroundColor(backgroundColor);
         setFileType(fileType);
         setErrorCorrectionLevel(errorCorrectionLevel);
         setBaseUrl(baseUrl);
+    }
+
+    public Integer getMaxQrSize() {
+        return maxQrSize;
+    }
+
+    public void setMaxQrSize(Integer maxQrSize) {
+        this.maxQrSize = maxQrSize;
     }
 
     public String getBaseUrl() {
@@ -84,7 +116,7 @@ public class QRImageSettings {
     }
 
     public void setX(Integer x) {
-        this.x = x;
+        this.x = Math.min(x, getMaxQrSize());
     }
 
     public Color getColor() {

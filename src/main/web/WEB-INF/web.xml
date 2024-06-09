@@ -4,11 +4,15 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <!--    PARAMS SECTION   -->
+
+    <!--  Deprecated: jsp generating path  -->
     <context-param>
         <param-name>GENERATOR_PATH</param-name>
         <param-value>/generate</param-value>
     </context-param>
 
+    <!--  QR subsystem generating redirect url  -->
     <context-param>
         <param-name>BASIC_REDIRECT_URL</param-name>
         <param-value>http://qr.qxyz.ru</param-value>
@@ -17,7 +21,7 @@
     <!-- Map generating parameters -->
     <context-param>
         <param-name>DEFAULT_MAP_API</param-name>
-<!--        <param-value>https://maps.google.com/local?q=${LATITUDE},${LONGITUDE}</param-value>-->
+    <!--        <param-value>https://maps.google.com/local?q=${LATITUDE},${LONGITUDE}</param-value>-->
          <param-value>https://yandex.ru/maps?ll=${LATITUDE}%2C${LONGITUDE}&amp;z=${DISTANCE}</param-value>
     </context-param>
     <context-param>
@@ -33,11 +37,38 @@
         <param-value>12</param-value>
     </context-param>
 
+    <!--  QR code generating default params  -->
+    <context-param>
+        <param-name>DEFAULT_QR_SIZE</param-name>
+        <param-value>165</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_QR_MAX_SIZE</param-name>
+        <param-value>1024</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_QR_FILE_TYPE</param-name>
+        <param-value>SVG</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_QR_CORRECTION_LEVEL</param-name>
+        <param-value>M</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_QR_COLOR</param-name>
+        <param-value>#000000</param-value>
+    </context-param>
+    <context-param>
+        <param-name>DEFAULT_QR_BACKGROUND</param-name>
+        <param-value>#FFFFFF</param-value>
+    </context-param>
+
+    <!--    SERVLET MAPPING SECTION   -->
+
     <servlet>
         <servlet-name>QRGenerating</servlet-name>
         <servlet-class>org.eustrosoft.qr.QRGeneratorServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>QRGenerating</servlet-name>
         <url-pattern>/generate</url-pattern>
