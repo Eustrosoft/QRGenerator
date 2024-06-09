@@ -2,8 +2,7 @@ LIBS=../../../lib/core-3.4.0.jar:../../../lib/javax.servlet-api-4.0.0.jar:../../
 BASE_PATH=src/main/java/
 PKG_PATH=org/eustrosoft/qr/
 WEB_RESOURCES=web/WEB-INF/
-PKG_SRC_ALL=${PKG_PATH}/*.java
-PKG_CLASS_ALL=${PKG_PATH}/*.class
+PKG_CLASS_ALL=${PKG_PATH}*/*.class
 PKG_FILENAME=qrGenerator
 WORK_PATH=work/
 WORKDOC_PATH=${WORK_PATH}/javadoc
@@ -22,8 +21,9 @@ all: build
 build:
 	@echo "-- buildng web application"
 	mkdir -p ${WORK_PATH}
-	cd ${BASE_PATH} && find org/ -type f -name "*.java" > sources \
-	&& ${JAVAC} -cp ${LIBS} @sources && ${JAR} -c0f ${PKG_FILENAME}.jar ${PKG_CLASS_ALL} \
+	cd ${BASE_PATH} \
+	&& find org/ -type f -name "*.java" > sources && ${JAVAC} -cp ${LIBS} @sources \
+	&& ${JAR} -c0f ${PKG_FILENAME}.jar ${PKG_CLASS_ALL} \
 	&& mv ${PKG_FILENAME}.jar ../../../${WORK_PATH} && cp -R ../${WEB_RESOURCES} ../../../${WORK_PATH}
 clean:
 	@echo "-- cleaning all targets"
