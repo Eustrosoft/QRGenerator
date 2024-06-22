@@ -74,6 +74,9 @@ public class QREustrosoftParams extends QRDefaultParams {
 
     public static String generateURL(String basicUrl, String q, String p, String d, String site) throws Exception {
         StringBuilder urlBuilder = new StringBuilder();
+        if (site != null && !site.isEmpty()) {
+            basicUrl = site;
+        }
         if (basicUrl == null || basicUrl.isEmpty()) {
             basicUrl = Constants.Default.BASIC_URL;
         }
@@ -92,10 +95,6 @@ public class QREustrosoftParams extends QRDefaultParams {
         if (d != null) {
             urlBuilder.append(Constants.Query.AND);
             setParam(urlBuilder, PARAM_D, d);
-        }
-        if (site != null) {
-            urlBuilder.append(Constants.Query.AND);
-            setParam(urlBuilder, PARAM_SITE, site);
         }
         return urlBuilder.toString();
     }
