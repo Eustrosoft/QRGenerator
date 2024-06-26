@@ -6,11 +6,10 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.google.zxing.qrcode.decoder.ErrorCorrectionLevel" %>
-<html>
-<head>
-    <title>QR generator</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
+
+<%-- JSP HEADER --%>
+<%@include file="header.jsp"%>
+
 <body>
 <%!
     private static final String WEB_PARAM_GENERATOR_PATH = "GENERATOR_PATH";
@@ -121,6 +120,8 @@
     fileType = getIfNotNull(request, PARAM_FILE_TYPE);
     correctionLevel = getIfNotNull(request, PARAM_CORRECTION_LEVEL);
 
+    PrintWriter writer = response.getWriter();
+
     if (!isNotEmpty(background)) {
         background = PLACEHOLDER_BACKGROUND;
     }
@@ -131,6 +132,7 @@
         generatedPath = request.getContextPath() + qrPath + "?" + getProcessedParameters();
     }
 %>
+
 <div class="mainContainer">
     <div class="containerHeader">
         <h1>QR code generator</h1>
@@ -208,3 +210,7 @@
 </div>
 </body>
 </html>
+
+<%-- JSP FOOTER --%>
+
+<%@include file="footer.jsp"%>

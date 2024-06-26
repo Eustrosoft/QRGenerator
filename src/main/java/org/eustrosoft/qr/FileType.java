@@ -1,10 +1,10 @@
 package org.eustrosoft.qr;
 
 public enum FileType {
-    SVG("svg"),
-    PNG("png"),
-    JPG("jpg"),
-    JPEG("jpeg");
+    SVG("SVG"),
+    PNG("PNG"),
+    JPG("JPG"),
+    JPEG("JPEG");
 
     public final static String[] CONTENT_TYPES = {"image/svg+xml", "image/png", "image/jpg", "image/jpeg"};
 
