@@ -1,11 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.io.PrintWriter" %>
-<%@ page import="org.eustrosoft.qr.FileType" %>
 <%@ page import="java.net.URLEncoder" %>
 <%@ page import="java.io.UnsupportedEncodingException" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
-<%@ page import="com.google.zxing.qrcode.decoder.ErrorCorrectionLevel" %>
 
 <%!
     // JSP MAIN SETTINGS
@@ -332,6 +330,73 @@
         html = html.replace(TEMPLATE_LINK, link);
         html = html.replace(TEMPLATE_LINK_BACK, linkBack);
         wln(html);
+    }
+
+    // File type enum for separate using
+    public enum FileType {
+        SVG("SVG"),
+        PNG("PNG"),
+        JPG("JPG"),
+        JPEG("JPEG");
+
+        public final static String[] CONTENT_TYPES = {"image/svg+xml", "image/png", "image/jpg", "image/jpeg"};
+
+        private String type;
+
+        public static FileType of(String value) {
+            if (value == null || value.isEmpty()) {
+                return null;
+            }
+            FileType[] values = values();
+            for (FileType fileType : values) {
+                if (value.equalsIgnoreCase(fileType.type)) {
+                    return fileType;
+                }
+            }
+            return null;
+        }
+
+        public static String getContentType(org.eustrosoft.qr.FileType value) {
+            if (value == null) {
+                return null;
+            }
+            return CONTENT_TYPES[value.ordinal()];
+        }
+
+        public String getType() {
+            return type;
+        }
+
+        FileType(String type) {
+            this.type = type;
+        }
+    }
+
+    // ErrorCorrectionLevel enum from zxing for separate using
+    public enum ErrorCorrectionLevel {
+        L(1),
+        M(0),
+        Q(3),
+        H(2);
+
+        private static final ErrorCorrectionLevel[] FOR_BITS = new ErrorCorrectionLevel[]{M, L, H, Q};
+        private final int bits;
+
+        private ErrorCorrectionLevel(int bits) {
+            this.bits = bits;
+        }
+
+        public int getBits() {
+            return this.bits;
+        }
+
+        public static ErrorCorrectionLevel forBits(int bits) {
+            if (bits >= 0 && bits < FOR_BITS.length) {
+                return FOR_BITS[bits];
+            } else {
+                throw new IllegalArgumentException();
+            }
+        }
     }
 %>
 
