@@ -57,6 +57,7 @@
     private static final String PARAM_BACKGROUND = "PARAM_BACKGROUND";
     private static final String PARAM_FILE_TYPE = "PARAM_FILE_TYPE";
     private static final String PARAM_CORRECTION_LEVEL = "PARAM_CORRECTION_LEVEL";
+    private static final String PARAM_ONLY_TEXT = "onlyText";
 
     // ACTIONS
     private static final String ACTION_GENERATE = "ACTION_GENERATE";
@@ -84,6 +85,7 @@
     private String background = "";
     private String width = "";
     private String correctionLevel = "";
+    private String onlyText = "";
 
     private PrintWriter writer;
 
@@ -115,6 +117,9 @@
         }
         if (isNotEmpty(phone)) {
             params.add(getPathParam("phone", phone));
+        }
+        if (isNotEmpty(onlyText)) {
+            params.add(getPathParam("onlyText", onlyText));
         }
         if (includeSettings) {
             // TODO: maybe remove from here (made for not include in print form link)
@@ -427,6 +432,7 @@
     color = getIfNotNull(request, PARAM_COLOR, PLACEHOLDER_COLOR);
     fileType = getIfNotNull(request, PARAM_FILE_TYPE, FileType.SVG.name());
     correctionLevel = getIfNotNull(request, PARAM_CORRECTION_LEVEL, ErrorCorrectionLevel.M.name());
+    onlyText = getMaxStringForGenerate(request.getParameter(PARAM_ONLY_TEXT));
 
     if (!isNotEmpty(background)) {
         background = PLACEHOLDER_BACKGROUND;
@@ -520,7 +526,7 @@
     }
 
     // Image generating
-    if (actionGenerate != null && actionPrintForm == null) {
+    if (actionGenerate != null && actionPrintForm == null && onlyText.isEmpty()) {
         wln("<div>");
         // Generate print form instead of generate action
         String queryString = request.getQueryString().replace(ACTION_GENERATE, ACTION_PRINT_FORM);
@@ -530,6 +536,10 @@
         wln("<label>Target link:</label>");
         wlf("<a name=\"qr\" href=\"%s\">Link</a>", generatedPath);
         wln("</div>");
+    }
+    // Text generating
+    if (!onlyText.isEmpty()) {
+        wln(String.format("<label>Text to generate: %s</label>", generatedPath));
     }
 
     // Server info

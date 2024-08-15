@@ -43,6 +43,7 @@ public class Constants {
     public static final String PARAM_FILE_TYPE = "fileType";
     public static final String PARAM_X = "x";
     public static final String PARAM_CORRECTION_LEVEL = "correctionLevel";
+    public static final String PARAM_ONY_TEXT = "onlyText";
 
     public static final String FORMAT_LONGITUDE = "${LONGITUDE}";
     public static final String FORMAT_LATITUDE = "${LATITUDE}";
