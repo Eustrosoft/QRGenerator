@@ -24,8 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.eustrosoft.qr.Constants.PARAM_ONY_TEXT;
-import static org.eustrosoft.qr.Constants.PARAM_X;
-import static org.eustrosoft.qr.util.Util.getOrDefault;
 import static org.eustrosoft.qr.util.Util.getOrDefaultExtract;
 
 public class QRGeneratorServlet extends HttpServlet {
@@ -38,7 +36,6 @@ public class QRGeneratorServlet extends HttpServlet {
             resp.setStatus(200);
 
             QRDto params = QRParamFactory.getRightDto(req);
-            PrintWriter writer = resp.getWriter();
             if (params == null) {
                 throw new Exception("Could not parse request");
             }
@@ -46,6 +43,7 @@ public class QRGeneratorServlet extends HttpServlet {
                     req, PARAM_ONY_TEXT, Boolean.FALSE,
                     Boolean::parseBoolean
             )) {
+                PrintWriter writer = resp.getWriter();
                 writer.println(params.getText());
                 writer.flush();
                 return;
@@ -55,6 +53,7 @@ public class QRGeneratorServlet extends HttpServlet {
 
             if (imageSettings.getFileType().equals(FileType.SVG)) {
                 resp.setContentType(FileType.getContentType(imageSettings.getFileType()));
+                PrintWriter writer = resp.getWriter();
                 writer.println("<?xml\n" +
                         "version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                         "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 1.1//EN\" \"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd\">");

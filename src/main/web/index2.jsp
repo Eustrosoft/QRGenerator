@@ -32,7 +32,13 @@
 
     // QR code parameters
 
-    private static final String PARAM_TEMPLATE = "template";
+    private static final String PARAM_TEMPLATE = "template"; // todo (sic!)
+    private static final String TYPE_TEXT = "text";
+    private static final String TYPE_TEL = "tel";
+    private static final String TYPE_URL = "url";
+    private static final String TYPE_EMAIL = "email";
+
+
     // QR type
     private static final String PARAM_TYPE = "type";
 
@@ -51,6 +57,41 @@
     // Phone params
     private static final String PARAM_PHONE = "phone";
 
+    // Email params
+    private static final String PARAM_EMAIL = "email";
+    private static final String PARAM_SUBJECT = "subject";
+    // param text
+
+    // Sms params
+    // param phone
+    // param text
+
+    // Contact params
+    // param phone
+    private static final String PARAM_FIRST_NAME = "firstName";
+    private static final String PARAM_LAST_NAME = "lastName";
+    private static final String PARAM_ORGANIZATION = "organization";
+    private static final String PARAM_TITLE = "title";
+    // param email
+    private static final String PARAM_MOBILE_PHONE = "mobilePhone";
+    private static final String PARAM_FAX = "fax";
+    private static final String PARAM_STREET = "street";
+    private static final String PARAM_CITY = "city";
+    private static final String PARAM_REGION = "region";
+    private static final String PARAM_POSTCODE = "postcode";
+    private static final String PARAM_COUNTRY = "country";
+    // param url
+
+    // Wifi params
+    private static final String PARAM_SSID = "ssid";
+    private static final String PARAM_PASSWORD = "password";
+    private static final String PARAM_ENCRYPTION = "encryption";
+
+    // Location params
+    private static final String PARAM_LATITUDE = "latitude";
+    private static final String PARAM_LONGITUDE = "longitude";
+    private static final String PARAM_DISTANCE = "distance";
+
     // QR code settings
     private static final String PARAM_COLOR = "PARAM_COLOR";
     private static final String PARAM_WIDTH = "PARAM_WIDTH";
@@ -66,6 +107,9 @@
 
     // PLACEHOLDERS
     private static final String PLACEHOLDER_TEXT = "Place your text here...";
+    private static final String PLACEHOLDER_EMAIL = "example@eustrosoft.org";
+    private static final String PLACEHOLDER_URL = "http://eustrosoft.org";
+    private static final String PLACEHOLDER_TEL = "+7-999-999-99-99";
     private static final Integer PLACEHOLDER_WIDTH = 300;
     private static final String PLACEHOLDER_COLOR = "#000000";
     private static final String PLACEHOLDER_BACKGROUND = "#FFFFFF";
@@ -79,6 +123,25 @@
     private String site = "";
     private String url = "";
     private String phone = "";
+    private String email = "";
+    private String subject = "";
+    private String ssid = "";
+    private String password = "";
+    private String encryption = "";
+    private String longitude = "";
+    private String latitude = "";
+    private String distance = "";
+    private String firstName = "";
+    private String lastName = "";
+    private String organization = "";
+    private String title = "";
+    private String mobilePhone = "";
+    private String fax = "";
+    private String street = "";
+    private String city = "";
+    private String region = "";
+    private String postcode = "";
+    private String country = "";
 
     private String fileType = "";
     private String color = "";
@@ -100,52 +163,53 @@
 
     String getProcessedParameters(boolean includeSettings) throws UnsupportedEncodingException {
         List<String> params = new ArrayList<>();
-        if (isNotEmpty(text)) {
-            params.add(getPathParam("text", text));
-        }
-        if (isNotEmpty(q)) {
-            params.add(getPathParam("q", q));
-        }
-        if (isNotEmpty(p)) {
-            params.add(getPathParam("p", p));
-        }
-        if (isNotEmpty(d)) {
-            params.add(getPathParam("d", d));
-        }
-        if (isNotEmpty(url)) {
-            params.add(getPathParam("url", url));
-        }
-        if (isNotEmpty(phone)) {
-            params.add(getPathParam("phone", phone));
-        }
-        if (isNotEmpty(onlyText)) {
-            params.add(getPathParam("onlyText", onlyText));
-        }
+        setIfNotEmpty(params, PARAM_TEXT, text);
+        setIfNotEmpty(params, PARAM_Q, q);
+        setIfNotEmpty(params, PARAM_P, p);
+        setIfNotEmpty(params, PARAM_D, d);
+        setIfNotEmpty(params, PARAM_URL, url);
+        setIfNotEmpty(params, PARAM_PHONE, phone);
+        setIfNotEmpty(params, PARAM_ONLY_TEXT, onlyText);
+        setIfNotEmpty(params, PARAM_EMAIL, email);
+        setIfNotEmpty(params, PARAM_SUBJECT, subject);
+        setIfNotEmpty(params, PARAM_SSID, ssid);
+        setIfNotEmpty(params, PARAM_PASSWORD, password);
+        setIfNotEmpty(params, PARAM_ENCRYPTION, encryption);
+        setIfNotEmpty(params, PARAM_LONGITUDE, longitude);
+        setIfNotEmpty(params, PARAM_LATITUDE, latitude);
+        setIfNotEmpty(params, PARAM_DISTANCE, distance);
+        setIfNotEmpty(params, PARAM_FIRST_NAME, fileType);
+        setIfNotEmpty(params, PARAM_LAST_NAME, lastName);
+        setIfNotEmpty(params, PARAM_ORGANIZATION, organization);
+        setIfNotEmpty(params, PARAM_TITLE, title);
+        setIfNotEmpty(params, PARAM_MOBILE_PHONE, mobilePhone);
+        setIfNotEmpty(params, PARAM_FAX, fax);
+        setIfNotEmpty(params, PARAM_STREET, street);
+        setIfNotEmpty(params, PARAM_CITY, city);
+        setIfNotEmpty(params, PARAM_REGION, region);
+        setIfNotEmpty(params, PARAM_POSTCODE, postcode);
+        setIfNotEmpty(params, PARAM_COUNTRY, country);
+
         if (includeSettings) {
             // TODO: maybe remove from here (made for not include in print form link)
-            if (isNotEmpty(site)) {
-                params.add(getPathParam("site", site));
-            }
-            if (isNotEmpty(formType)) {
-                params.add(getPathParam("type", formType));
-            }
-            if (isNotEmpty(color)) {
-                params.add(getPathParam("color", color));
-            }
-            if (isNotEmpty(background)) {
-                params.add(getPathParam("background", background));
-            }
-            if (isNotEmpty(width)) {
-                params.add(getPathParam("x", width));
-            }
-            if (isNotEmpty(fileType)) {
-                params.add(getPathParam("fileType", fileType));
-            }
-            if (isNotEmpty(correctionLevel)) {
-                params.add(getPathParam("correctionLevel", correctionLevel));
-            }
+            setIfNotEmpty(params, "site", site);
+            setIfNotEmpty(params, "type", formType);
+            setIfNotEmpty(params, "color", color);
+            setIfNotEmpty(params, "background", background);
+            setIfNotEmpty(params, "x", width);
+            setIfNotEmpty(params, "fileType", fileType);
+            setIfNotEmpty(params, "correctionLevel", correctionLevel);
         }
         return String.join("&", params);
+    }
+
+    void setIfNotEmpty(
+            final List<String> params,
+            final String paramName, final String paramValue
+    ) throws UnsupportedEncodingException {
+        if (isNotEmpty(paramValue)) {
+            params.add(getPathParam(paramName, paramValue));
+        }
     }
 
     String getPathParam(String paramName, String param) throws UnsupportedEncodingException {
@@ -210,6 +274,21 @@
             case "PHONE":
                 printPhoneForm();
                 break;
+            case "EMAIL":
+                printEmailForm();
+                break;
+            case "SMS":
+                printSmsForm();
+                break;
+            case "CONTACT":
+                printContactForm();
+                break;
+            case "WIFI":
+                printWIFIForm();
+                break;
+            case "LOCATION":
+                printLocationForm();
+                break;
             default:
                 printQRQXYZForm();
                 break;
@@ -218,38 +297,104 @@
 
     private void printQRQXYZForm() {
         label(PARAM_Q);
-        input(PARAM_Q, "text", "0001AF", q);
-        br();
+        input(PARAM_Q, TYPE_TEXT, "0001AF", q);
         label(PARAM_P);
-        input(PARAM_P, "text", "", p);
-        br();
+        input(PARAM_P, TYPE_TEXT, "", p);
         label(PARAM_D);
-        input(PARAM_D, "text", "", d);
-        br();
+        input(PARAM_D, TYPE_TEXT, "", d);
         label(PARAM_SITE);
-        input(PARAM_SITE, "text", "", site);
-        br();
+        input(PARAM_SITE, TYPE_TEXT, "", site);
     }
 
     private void printTextForm() {
         label(PARAM_TEXT);
-        input(PARAM_TEXT, "text", "", text);
-        br();
-        hiddenInput(PARAM_TYPE, "text", "TEXT");
+        input(PARAM_TEXT, TYPE_TEXT, PLACEHOLDER_TEXT, text);
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "TEXT");
     }
 
     private void printURLForm() {
         label(PARAM_URL);
-        input(PARAM_URL, "url", "", url);
-        br();
-        hiddenInput(PARAM_TYPE, "text", "URL");
+        input(PARAM_URL, TYPE_URL, PLACEHOLDER_URL, url);
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "URL");
     }
 
     private void printPhoneForm() {
         label(PARAM_PHONE);
-        input(PARAM_PHONE, "tel", "", phone);
+        input(PARAM_PHONE, TYPE_TEL, PLACEHOLDER_TEL, phone);
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "PHONE");
+    }
+
+    private void printEmailForm() {
+        label(PARAM_EMAIL);
+        input(PARAM_EMAIL, TYPE_EMAIL, PLACEHOLDER_EMAIL, email);
+        label(PARAM_SUBJECT);
+        input(PARAM_SUBJECT, TYPE_TEXT, "Subject", subject);
+        label(PARAM_TEXT);
+        input(PARAM_TEXT, TYPE_TEXT, PLACEHOLDER_TEXT, text);
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "EMAIL");
+    }
+
+    private void printSmsForm() {
+        label("Sms");
+        input(PARAM_PHONE, TYPE_TEL, PLACEHOLDER_TEL, phone);
+        label(PARAM_TEXT);
+        input(PARAM_TEXT, TYPE_TEXT, "Text", text);
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "SMS");
+    }
+
+    private void printContactForm() {
+        label(PARAM_PHONE);
+        input(PARAM_PHONE, TYPE_TEL, PLACEHOLDER_TEL, phone);
+        label(PARAM_FIRST_NAME);
+        input(PARAM_FIRST_NAME, TYPE_TEXT, PLACEHOLDER_TEXT, firstName);
+        label(PARAM_LAST_NAME);
+        input(PARAM_LAST_NAME, TYPE_TEXT, PLACEHOLDER_TEXT, lastName);
+        label(PARAM_ORGANIZATION);
+        input(PARAM_ORGANIZATION, TYPE_TEXT, PLACEHOLDER_TEXT, organization);
+        label(PARAM_TITLE);
+        input(PARAM_TITLE, TYPE_TEXT, PLACEHOLDER_TEXT, title);
+        label(PARAM_EMAIL);
+        input(PARAM_EMAIL, TYPE_EMAIL, PLACEHOLDER_EMAIL, email);
+        label(PARAM_MOBILE_PHONE);
+        input(PARAM_MOBILE_PHONE, TYPE_TEL, PLACEHOLDER_TEL, mobilePhone);
+        label(PARAM_FAX);
+        input(PARAM_FAX, TYPE_TEXT, PLACEHOLDER_TEXT, fax);
+        label(PARAM_STREET);
+        input(PARAM_STREET, TYPE_TEXT, PLACEHOLDER_TEXT, street);
+        label(PARAM_CITY);
+        input(PARAM_CITY, TYPE_TEXT, PLACEHOLDER_TEXT, city);
+        label(PARAM_REGION);
+        input(PARAM_REGION, TYPE_TEXT, PLACEHOLDER_TEXT, region);
+        label(PARAM_POSTCODE);
+        input(PARAM_POSTCODE, TYPE_TEXT, PLACEHOLDER_TEXT, postcode);
+        label(PARAM_COUNTRY);
+        input(PARAM_COUNTRY, TYPE_TEXT, PLACEHOLDER_TEXT, country);
+        label(PARAM_URL);
+        input(PARAM_URL, TYPE_URL, PLACEHOLDER_URL, url);
         br();
-        hiddenInput(PARAM_TYPE, "text", "PHONE");
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "CONTACT");
+    }
+
+    private void printWIFIForm() {
+        label(PARAM_SSID);
+        input(PARAM_SSID, TYPE_TEXT, PLACEHOLDER_TEXT, ssid);
+        label(PARAM_PASSWORD);
+        input(PARAM_PASSWORD, TYPE_TEXT, PLACEHOLDER_TEXT, password);
+        label(PARAM_ENCRYPTION);
+        input(PARAM_ENCRYPTION, TYPE_TEXT, PLACEHOLDER_TEXT, encryption);
+        br();
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "WIFI");
+    }
+
+    private void printLocationForm() {
+        label(PARAM_LATITUDE);
+        input(PARAM_LATITUDE, TYPE_TEXT, PLACEHOLDER_TEXT, latitude);
+        label(PARAM_LONGITUDE);
+        input(PARAM_LONGITUDE, TYPE_TEXT, PLACEHOLDER_TEXT, longitude);
+        label(PARAM_DISTANCE);
+        input(PARAM_DISTANCE, TYPE_TEXT, PLACEHOLDER_TEXT, distance);
+        br();
+        hiddenInput(PARAM_TYPE, TYPE_TEXT, "LOCATION");
     }
 
     private void printFormTypes() {
@@ -257,6 +402,11 @@
         a("Phone", getBaseForm() + "&" + PARAM_TYPE + "=PHONE");
         a("Url", getBaseForm() + "&" + PARAM_TYPE + "=URL");
         a("Text", getBaseForm() + "&" + PARAM_TYPE + "=TEXT");
+        a("Email", getBaseForm() + "&" + PARAM_TYPE + "=EMAIL");
+        a("Sms", getBaseForm() + "&" + PARAM_TYPE + "=SMS");
+        a("Contact", getBaseForm() + "&" + PARAM_TYPE + "=CONTACT");
+        a("Wifi", getBaseForm() + "&" + PARAM_TYPE + "=WIFI");
+        a("Location", getBaseForm() + "&" + PARAM_TYPE + "=LOCATION");
     }
 
     private void label(String text) {
@@ -272,11 +422,13 @@
     }
 
     private void input(String name, String type, Object placeholder, String value) {
-        writer.println("<input name=\"" + name + "\" type=\"" + type + "\" placeholder=\"" + placeholder + "\" value=\"" + value + "\"/>");
+        writer.print("<input name=\"" + name + "\" type=\"" + type + "\" placeholder=\"" + placeholder + "\" value=\"" + value + "\"/>");
+        writer.println("<br/>");
     }
 
     private void hiddenInput(String name, String type, String value) {
         writer.println("<input name=\"" + name + "\" hidden=\"true\" type=\"" + type + "\" value=\"" + value + "\"/>");
+        writer.println("<br/>");
     }
 
     public String getBaseForm() {
@@ -425,6 +577,25 @@
     site = getMaxStringForGenerate(request.getParameter(PARAM_SITE));
     url = getMaxStringForGenerate(request.getParameter(PARAM_URL));
     phone = getMaxStringForGenerate(request.getParameter(PARAM_PHONE));
+    email = getMaxStringForGenerate(request.getParameter(PARAM_EMAIL));
+    subject = getMaxStringForGenerate(request.getParameter(PARAM_SUBJECT));
+    firstName = getMaxStringForGenerate(request.getParameter(PARAM_FIRST_NAME));
+    lastName = getMaxStringForGenerate(request.getParameter(PARAM_LAST_NAME));
+    organization = getMaxStringForGenerate(request.getParameter(PARAM_ORGANIZATION));
+    title = getMaxStringForGenerate(request.getParameter(PARAM_TITLE));
+    mobilePhone = getMaxStringForGenerate(request.getParameter(PARAM_MOBILE_PHONE));
+    fax = getMaxStringForGenerate(request.getParameter(PARAM_FAX));
+    street = getMaxStringForGenerate(request.getParameter(PARAM_STREET));
+    city = getMaxStringForGenerate(request.getParameter(PARAM_CITY));
+    region = getMaxStringForGenerate(request.getParameter(PARAM_REGION));
+    postcode = getMaxStringForGenerate(request.getParameter(PARAM_POSTCODE));
+    country = getMaxStringForGenerate(request.getParameter(PARAM_COUNTRY));
+    ssid = getMaxStringForGenerate(request.getParameter(PARAM_SSID));
+    password = getMaxStringForGenerate(request.getParameter(PARAM_PASSWORD));
+    encryption = getMaxStringForGenerate(request.getParameter(PARAM_ENCRYPTION));
+    latitude = getMaxStringForGenerate(request.getParameter(PARAM_LATITUDE));
+    longitude = getMaxStringForGenerate(request.getParameter(PARAM_LONGITUDE));
+    distance = getMaxStringForGenerate(request.getParameter(PARAM_DISTANCE));
 
     // QR Settings
     width = getIfNotNull(request, PARAM_WIDTH, PLACEHOLDER_WIDTH.toString());
