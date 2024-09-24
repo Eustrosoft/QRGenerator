@@ -1,10 +1,28 @@
 package org.eustrosoft.qr.util;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import java.util.function.Function;
 
 public class Util {
+
+    public static void setContentDispositionHeaders(
+            final HttpServletResponse response,
+            String fileName,
+            String extension
+    ) {
+        if (fileName == null) {
+            fileName = "qr";
+        }
+        if (extension == null) {
+            fileName = "png";
+        }
+        response.addHeader(
+                "Content-Disposition",
+                "inline; filename=\"" + fileName + "." + extension + "\""
+        );
+    }
 
     public static <T> T getOrDefault(
             HttpServletRequest request, String param, T defaultValue

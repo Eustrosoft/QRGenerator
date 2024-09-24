@@ -40,6 +40,13 @@ public class QREustrosoftParams extends QRDefaultParams {
         this.site = site;
     }
 
+    @Override
+    public String getFileName() {
+        return q == null
+                ? super.getFileName()
+                : q;
+    }
+
     public String getQ() {
         return q;
     }

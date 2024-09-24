@@ -52,7 +52,7 @@
     </context-param>
     <context-param>
         <param-name>DEFAULT_QR_CORRECTION_LEVEL</param-name>
-        <param-value>M</param-value>
+        <param-value>L</param-value>
     </context-param>
     <context-param>
         <param-name>DEFAULT_QR_COLOR</param-name>

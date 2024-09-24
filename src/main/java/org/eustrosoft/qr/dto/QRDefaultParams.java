@@ -9,6 +9,7 @@ import static org.eustrosoft.qr.util.Util.getOrDefault;
 public class QRDefaultParams implements QRDto {
     private String text = "";
     private QRImageSettings imageSettings;
+    private String fileName = "qr";
 
     public static QRDefaultParams fromRequest(
             HttpServletRequest request,
@@ -32,6 +33,10 @@ public class QRDefaultParams implements QRDto {
 
     protected static StringBuilder setParam(StringBuilder builder, String param, String value) {
         return builder.append(param).append(Constants.Query.EQUALS).append(value);
+    }
+
+    public String getFileName() {
+        return fileName;
     }
 
     @Override

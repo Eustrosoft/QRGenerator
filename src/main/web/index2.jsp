@@ -4,9 +4,13 @@
 <%@ page import="java.io.UnsupportedEncodingException" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.eustrosoft.qr.QRParamFactory" %>
+<%@ page import="org.eustrosoft.qr.dto.QRDto" %>
 
 <%!
     // JSP MAIN SETTINGS
+    private static final Boolean WRITE_TO_QR_TEXT = true;
+
     private static final String CGI_MAIN = "index2.jsp";
     private static final String WEB_PARAM_GENERATOR_PATH = "GENERATOR_PATH";
 
@@ -178,7 +182,7 @@
         setIfNotEmpty(params, PARAM_LONGITUDE, longitude);
         setIfNotEmpty(params, PARAM_LATITUDE, latitude);
         setIfNotEmpty(params, PARAM_DISTANCE, distance);
-        setIfNotEmpty(params, PARAM_FIRST_NAME, fileType);
+        setIfNotEmpty(params, PARAM_FIRST_NAME, firstName);
         setIfNotEmpty(params, PARAM_LAST_NAME, lastName);
         setIfNotEmpty(params, PARAM_ORGANIZATION, organization);
         setIfNotEmpty(params, PARAM_TITLE, title);
@@ -513,13 +517,6 @@
             return null;
         }
 
-        public static String getContentType(org.eustrosoft.qr.FileType value) {
-            if (value == null) {
-                return null;
-            }
-            return CONTENT_TYPES[value.ordinal()];
-        }
-
         public String getType() {
             return type;
         }
@@ -639,17 +636,21 @@
                 width
         );
         wln("<label>Background:</label>\n");
-        wlf("<input name=\"%s\" type=\"color\" placeholder=\"%s\" value=\"%s\"> <br>",
+        input(
                 PARAM_BACKGROUND,
+                "color",
                 PLACEHOLDER_BACKGROUND,
                 background
         );
+        br();
         wln("<label>Color:</label>\n");
-        wlf("<input name=\"%s\" type=\"color\" placeholder=\"%s\" value=\"%s\"><br>",
+        input(
                 PARAM_COLOR,
+                "color",
                 PLACEHOLDER_COLOR,
                 color
         );
+        br();
         wln("<label>Correction level:</label>\n");
 
         wlf("<select name=\"%s\">", PARAM_CORRECTION_LEVEL);
@@ -704,8 +705,21 @@
         wln("<a href=\"" + CGI_MAIN + "?" + queryString + "\">"); // Make link from image to go back
         wlf("<img src=\"%s\" width=\"%s\">", generatedPath, width);
         wln("</a>");
+        br();
         wln("<label>Target link:</label>");
         wlf("<a name=\"qr\" href=\"%s\">Link</a>", generatedPath);
+        // Print to direct QR text
+        if (WRITE_TO_QR_TEXT) {
+            try {
+                br();
+                QRDto rightDto = QRParamFactory.getRightDto(request);
+                if (rightDto != null) {
+                    wln("Text to encode: <b>" + rightDto.getText() + " </b>");
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         wln("</div>");
     }
     // Text generating
@@ -729,7 +743,11 @@
         link = link + getProcessedParameters(false);
         // Generating back link: replace print form action to generate qr action in form
         String linkBack = CGI_MAIN + "?" + request.getQueryString().replace(ACTION_PRINT_FORM, ACTION_GENERATE);
-        printTemplate(null, generatedPath, link, linkBack); // TODO: usage for several templates
+        try {
+            printTemplate(null, generatedPath, link, linkBack); // TODO: usage for several templates
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // FOOTER

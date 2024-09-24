@@ -6,4 +6,5 @@ package org.eustrosoft.qr.dto;
 public interface QRDto {
     String getText();
     QRImageSettings getImageSettings();
+    String getFileName();
 }

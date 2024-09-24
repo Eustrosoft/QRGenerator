@@ -3,8 +3,9 @@ package org.eustrosoft.qr;
 public enum FileType {
     SVG("SVG"),
     PNG("PNG"),
-    JPG("JPG"),
-    JPEG("JPEG");
+    // Only PNG generating
+    JPG("PNG"),
+    JPEG("PNG");
 
     public final static String[] CONTENT_TYPES = {"image/svg+xml", "image/png", "image/jpg", "image/jpeg"};
 

@@ -7,10 +7,7 @@
     <groupId>org.eustrosoft</groupId>
     <artifactId>QRGenerator</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <modules>
-        <module>Bots</module>
-    </modules>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.target>8</maven.compiler.target>

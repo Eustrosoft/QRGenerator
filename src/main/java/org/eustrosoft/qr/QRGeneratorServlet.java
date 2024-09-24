@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.eustrosoft.qr.dto.QRDto;
 import org.eustrosoft.qr.dto.QREustrosoftParams;
 import org.eustrosoft.qr.dto.QRImageSettings;
+import org.eustrosoft.qr.util.Util;
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.ViewBox;
 
@@ -50,6 +51,12 @@ public class QRGeneratorServlet extends HttpServlet {
             }
             BufferedImage qrImage = getQRImage(params);
             QRImageSettings imageSettings = params.getImageSettings();
+
+            Util.setContentDispositionHeaders(
+                    resp,
+                    params.getFileName(),
+                    imageSettings.getFileType().getType().toLowerCase()
+            );
 
             if (imageSettings.getFileType().equals(FileType.SVG)) {
                 resp.setContentType(FileType.getContentType(imageSettings.getFileType()));
