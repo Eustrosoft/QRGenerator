@@ -439,14 +439,11 @@
         return CGI_MAIN + "?" + ACTION_SHOW_FORM + "=TRUE";
     }
 
-    public String getBaseLinkTyped(String type) {
-        return CGI_MAIN + "?" + ACTION_SHOW_FORM + "=" + Boolean.TRUE + "&" + PARAM_TYPE + "=" + type;
-    }
-
     public void w(String msg) {
         try {
             writer.print(msg);
         } catch (Exception ex) {
+            // ignored
         }
     }
 
@@ -454,6 +451,7 @@
         try {
             writer.println(msg);
         } catch (Exception ioe) {
+            // ignored
         }
     }
 
@@ -461,6 +459,7 @@
         try {
             writer.println(String.format(msg, params));
         } catch (Exception ioe) {
+            // ignored
         }
     }
 
@@ -468,6 +467,7 @@
         try {
             writer.println();
         } catch (Exception ioe) {
+            // ignored
         }
     }
 
@@ -538,18 +538,6 @@
 
         private ErrorCorrectionLevel(int bits) {
             this.bits = bits;
-        }
-
-        public int getBits() {
-            return this.bits;
-        }
-
-        public static ErrorCorrectionLevel forBits(int bits) {
-            if (bits >= 0 && bits < FOR_BITS.length) {
-                return FOR_BITS[bits];
-            } else {
-                throw new IllegalArgumentException();
-            }
         }
     }
 %>
@@ -622,7 +610,8 @@
     }
 
     // FORM print section
-    if ((actionShowForm != null || actionGenerate != null) && actionPrintForm == null) {
+    boolean needToShowForm = actionShowForm  == null || actionShowForm.equalsIgnoreCase("true");
+    if ((needToShowForm || actionGenerate != null) && actionPrintForm == null) {
         wln("<div>");
         wln("<form>");
         // Choose form type

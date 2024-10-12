@@ -95,11 +95,11 @@ public class QREustrosoftParams extends QRDefaultParams {
             } else {
                 throw new Exception("Illegal argument Q");
             }
-        if (p != null) {
+        if (p != null && !p.isEmpty()) {
             urlBuilder.append(Constants.Query.AND);
             setParam(urlBuilder, PARAM_P, p);
         }
-        if (d != null) {
+        if (d != null && !d.isEmpty()) {
             urlBuilder.append(Constants.Query.AND);
             setParam(urlBuilder, PARAM_D, d);
         }

@@ -1,6 +1,8 @@
 package org.eustrosoft.qr.dto;
 
 import javax.servlet.http.HttpServletRequest;
+import org.eustrosoft.qr.Constants;
+import org.eustrosoft.qr.WebParams;
 
 import static org.eustrosoft.qr.Constants.EMPTY;
 import static org.eustrosoft.qr.Constants.PARAM_URL;
@@ -14,7 +16,7 @@ public class QRUrlParams extends QRDefaultParams {
             QRImageSettings imageSettings
     ) throws Exception {
         return new QRUrlParams(
-                getOrDefault(request, PARAM_URL, EMPTY),
+                textToUrl(request, getOrDefault(request, PARAM_URL, EMPTY)),
                 imageSettings
         );
     }
@@ -29,5 +31,18 @@ public class QRUrlParams extends QRDefaultParams {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public static String textToUrl(
+            HttpServletRequest request,
+            String text
+    ) {
+        if (text == null || text.isEmpty()) {
+            return "";
+        }
+        if (text.startsWith("http://") || text.startsWith("https://")) {
+            return text;
+        }
+        return WebParams.getString(request, WebParams.DEFAULT_HTTP_SCHEMA, Constants.Default.HTTP_SCHEMA) + text;
     }
 }

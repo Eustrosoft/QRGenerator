@@ -13,6 +13,7 @@ public final class WebParams {
     public final static String DEFAULT_MAP_DISTANCE = "DEFAULT_MAP_DISTANCE";
 
     // QR image default settings
+    public final static String DEFAULT_HTTP_SCHEMA = "DEFAULT_HTTP_SCHEMA";
     public final static String DEFAULT_QR_SIZE = "DEFAULT_QR_SIZE";
     public final static String DEFAULT_QR_MAX_SIZE = "DEFAULT_QR_MAX_SIZE";
     public final static String DEFAULT_QR_FILE_TYPE = "DEFAULT_QR_FILE_TYPE";

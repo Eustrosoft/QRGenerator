@@ -39,6 +39,10 @@
 
     <!--  QR code generating default params  -->
     <context-param>
+        <param-name>DEFAULT_HTTP_SCHEMA</param-name>
+        <param-value>http://</param-value>
+    </context-param>
+    <context-param>
         <param-name>DEFAULT_QR_SIZE</param-name>
         <param-value>165</param-value>
     </context-param>
