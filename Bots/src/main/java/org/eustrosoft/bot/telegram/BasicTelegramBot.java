@@ -2,7 +2,6 @@ package org.eustrosoft.bot.telegram;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
-import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.Keyboard;
 import com.pengrad.telegrambot.model.request.ParseMode;
@@ -23,7 +22,7 @@ public abstract class BasicTelegramBot {
     }
 
     protected void sendMessage(Update update, String message) {
-        SendMessage request = new SendMessage(update.message().chat().id(), message)
+        SendMessage request = new SendMessage(tryGetChatId(update), message)
                 .parseMode(ParseMode.HTML)
                 .allowSendingWithoutReply(true)
                 .disableNotification(true);
@@ -37,7 +36,8 @@ public abstract class BasicTelegramBot {
                 .resizeKeyboard(true)
                 .selective(true);
 
-        SendMessage keyboardMessage = new SendMessage(update.message().chat().id(), message)
+        Long chatId = tryGetChatId(update);
+        SendMessage keyboardMessage = new SendMessage(chatId, message)
                 .parseMode(ParseMode.HTML)
                 .allowSendingWithoutReply(true)
                 .disableNotification(true)
@@ -45,13 +45,12 @@ public abstract class BasicTelegramBot {
 
         getTelegramBot().execute(keyboardMessage);
 
-        responseToButtons.putIfAbsent(update.message().from().id(), true);
+        responseToButtons.putIfAbsent(chatId, true);
     }
 
-    protected void sendInlineButtons(Update update, String message, InlineKeyboardButton[] buttons) {
-        Keyboard inlineKeyboard = new InlineKeyboardMarkup(buttons);
-
-        SendMessage keyboardMessage = new SendMessage(update.message().chat().id(), message)
+    protected void sendInlineButtons(Update update, String message, InlineKeyboardMarkup inlineKeyboard) {
+        Long chatId = tryGetChatId(update);
+        SendMessage keyboardMessage = new SendMessage(chatId, message)
                 .parseMode(ParseMode.HTML)
                 .allowSendingWithoutReply(true)
                 .disableNotification(true)
@@ -59,6 +58,12 @@ public abstract class BasicTelegramBot {
 
         getTelegramBot().execute(keyboardMessage);
 
-        responseToButtons.putIfAbsent(update.message().from().id(), true);
+        responseToButtons.putIfAbsent(chatId, true);
+    }
+
+    protected Long tryGetChatId(Update update) {
+        return update.message() != null
+                ? update.message().chat().id()
+                : update.callbackQuery().maybeInaccessibleMessage().chat().id();
     }
 }

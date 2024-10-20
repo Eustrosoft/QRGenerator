@@ -1,5 +1,7 @@
 package org.eustrosoft.bot.telegram.enums;
 
+import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import org.eustrosoft.bot.telegram.Constants;
 
 import java.util.Arrays;
@@ -29,6 +31,17 @@ public enum QRType implements KeyboardEnum {
             types[i] = values[i].name();
         }
         return types;
+    }
+
+    @Override
+    public InlineKeyboardMarkup getInlineKeyboard() {
+        InlineKeyboardButton[][] buttons = new InlineKeyboardButton[getKeyboard().length][1];
+        for (int i = 0; i < getKeyboard().length; i++) {
+            buttons[i][0] = new InlineKeyboardButton(getKeyboard()[i])
+                    .callbackData(getKeyboard()[i]);
+        }
+        return new InlineKeyboardMarkup(buttons);
+
     }
 
     public static boolean has(String val) {

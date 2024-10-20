@@ -2,6 +2,7 @@ package org.eustrosoft.bot.telegram.abomination;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
+import com.pengrad.telegrambot.model.CallbackQuery;
 import com.pengrad.telegrambot.model.Chat;
 import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
@@ -83,14 +84,50 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
         public int process(List<Update> list) {
             int lastProcessedId = 1;
             for (Update update : list) {
-                processMessage(update);
+                processUpdate(update);
                 lastProcessedId = update.updateId();
             }
             return lastProcessedId;
         }
 
-        public void processMessage(Update update) {
+        public void processUpdate(Update update) {
+            if (update.message() != null) {
+                processMessage(update);
+            } else if (update.callbackQuery() != null) {
+                processCallback(update);
+            }
+        }
+
+        private void processCallback(Update update) {
+            CallbackQuery callbackQuery = update.callbackQuery();
+            if (callbackQuery == null) {
+                logger.log(Level.WARNING, "Callback query is null. Skipping.");
+                return;
+            }
+            String data = callbackQuery.data();
+            Long userId = callbackQuery.from().id();
+
+            QRType type = QRType.valueOf(data);
+            if (!QRType.isAllowedType(type)) {
+                sendMessage(update, GO_TO_OUT_SERVICE_TEXT);
+                responseToButtons.remove(userId);
+                sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
+                return;
+            }
+            sendMessage(
+                    update,
+                    Constants.Messages.WRITE_QR_TEXT + type.name()
+            );
+            currentUserTypes.put(userId, type);
+            responseToButtons.remove(userId);
+        }
+
+        private void processMessage(Update update) {
             Message message = update.message();
+            if (message == null) {
+                logger.log(Level.WARNING, "Message is null. Skipping.");
+                return;
+            }
             String messageText = message.text();
             Chat chat = message.chat();
             logger.log(
@@ -102,11 +139,11 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
             );
             if (messageText.equals(Constants.Commands.START)) {
                 sendStartMessage(update);
-                sendButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getKeyboard());
+                sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
                 return;
             }
             if (messageText.equals(Constants.Commands.TYPES)) {
-                sendButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getKeyboard());
+                sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
                 return;
             }
             if (responseToButtons.containsKey(update.message().from().id()) && QRType.has(messageText)) {
@@ -114,7 +151,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
                 if (!QRType.isAllowedType(type)) {
                     sendMessage(update, GO_TO_OUT_SERVICE_TEXT);
                     responseToButtons.remove(update.message().from().id());
-                    sendButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getKeyboard());
+                    sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
                     return;
                 }
                 sendMessage(
@@ -150,7 +187,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
 
                     telegramBot.execute(photo);
                 }
-                sendButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getKeyboard());
+                sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
             } catch (Exception ex) {
                 ex.printStackTrace();
                 logger.log(Level.INFO, ex.getLocalizedMessage());
