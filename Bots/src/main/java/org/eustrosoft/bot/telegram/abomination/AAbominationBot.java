@@ -60,7 +60,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
 
             logger.log(Level.INFO, "Bot successfully started");
         } catch (Exception ex) {
-            ex.printStackTrace();
+            logger.log(Level.WARNING, ex.getMessage());
         }
     }
 
@@ -76,9 +76,9 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
             fh.setFormatter(formatter);
             logger.info("Logger was registered");
         } catch (SecurityException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, e.getMessage());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
                 telegramBot.shutdown();
                 logger.log(Level.INFO, "Bot successfully shut down");
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.log(Level.WARNING, ex.getMessage());
             }
         }
     }
@@ -222,7 +222,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
                 sendInlineButtons(update, Constants.Messages.CHOOSE_QR_TYPE_MESSAGE, QRType.TEXT.getInlineKeyboard());
             } catch (Exception ex) {
                 ex.printStackTrace();
-                logger.log(Level.INFO, ex.getLocalizedMessage());
+                logger.log(Level.WARNING, ex.getLocalizedMessage());
             } finally {
                 currentUserTypes.remove(update.message().from().id());
             }
@@ -242,14 +242,14 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
 
                 return buffer.toByteArray();
             } catch (Exception exception) {
-                exception.printStackTrace();
+                logger.log(Level.WARNING, exception.getMessage());
                 return new byte[0];
             } finally {
                 if (stream != null) {
                     try {
                         stream.close();
                     } catch (Exception ex) {
-                        ex.printStackTrace();
+                        logger.log(Level.WARNING, ex.getMessage());
                     }
                 }
             }
