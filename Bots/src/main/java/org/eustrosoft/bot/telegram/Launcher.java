@@ -16,11 +16,22 @@ public class Launcher {
             );
         }
 
-        Thread botThread = new Thread(new AAbominationBot(args[0], args[1]));
+        System.out.println("Try startup");
+        try {
+            deamonize();
+        } catch (Exception e) {
+            System.err.println("Startup failed");
+            e.printStackTrace();
+            System.exit(1);
+        }
 
-        botThread.setDaemon(false); // optional
-        botThread.start();
+        Thread thread = new Thread(new AAbominationBot(args[0], args[1]));
+//        Thread thread = new Thread(new StubThread());
+        thread.start();
+    }
 
-        System.out.println("App started");
+    public static void deamonize() {
+        System.out.close();
+        System.err.close();
     }
 }

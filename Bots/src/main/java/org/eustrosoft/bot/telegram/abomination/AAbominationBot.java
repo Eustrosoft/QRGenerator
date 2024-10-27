@@ -13,6 +13,8 @@ import org.eustrosoft.bot.telegram.Constants;
 import org.eustrosoft.bot.telegram.enums.QRType;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -21,8 +23,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static org.eustrosoft.bot.telegram.Constants.Messages.GO_TO_OUT_SERVICE_TEXT;
 
@@ -33,9 +37,11 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
     private final String token;
     private final String qrGenerateUrl;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
+    private final static File LOG_FILE = new File("logs.txt");
 
     @Override
     public void run() {
+        initLogger();
         initBot();
     }
 
@@ -58,14 +64,40 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
         }
     }
 
+    private void initLogger() {
+        FileHandler fh;
+        try {
+            if (!LOG_FILE.exists()) {
+                LOG_FILE.createNewFile();
+            }
+            fh = new FileHandler(LOG_FILE.getAbsolutePath(), true);
+            logger.addHandler(fh);
+            SimpleFormatter formatter = new SimpleFormatter();
+            fh.setFormatter(formatter);
+            logger.info("Logger was registered");
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void shutdownBot() {
         if (telegramBot != null) {
             try {
                 telegramBot.shutdown();
+                logger.log(Level.INFO, "Bot successfully shut down");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        shutdownBot();
+        logger.setUseParentHandlers(false);
     }
 
     @Override
