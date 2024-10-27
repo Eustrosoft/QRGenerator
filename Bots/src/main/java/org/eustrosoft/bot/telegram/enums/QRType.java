@@ -9,12 +9,7 @@ import java.util.Arrays;
 public enum QRType implements KeyboardEnum {
     TEXT,
     URL,
-    PHONE,
-    SMS,
-    EMAIL,
-    CONTACT,
-    WIFI,
-    LOCATION;
+    OTHER;
 
     public static boolean isAllowedType(QRType type) {
         if (type == null) {
