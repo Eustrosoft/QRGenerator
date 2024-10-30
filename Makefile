@@ -9,6 +9,7 @@ WEB_RESOURCES=web/WEB-INF/
 PKG_FILENAME=qrGenerator.jar
 PKG_BOTS_FILENAME=telegramBot.jar
 PKG_BOTS_MANIFEST=../resources/META-INF/MANIFEST.MF
+PKG_BOTS_RESOURCES=../resources/application.properties
 
 PKG_PATH=org/eustrosoft/qr/
 PKG_BOTS_PATH=org/eustrosoft/bot/
@@ -37,7 +38,7 @@ build:
 	@echo "-- buildng bot application"
 	cd ${BOTS_DIR}/${BASE_PATH} \
 	&& find org/ -type f -name "*.java" > sources && ${JAVAC} -cp ${BOT_LIBS} @sources \
-	&& ${JAR} -cmf ${PKG_BOTS_MANIFEST} ${PKG_BOTS_FILENAME} ${PKG_BOTS_CLASSES} \
+	&& ${JAR} -cmf ${PKG_BOTS_MANIFEST} ${PKG_BOTS_FILENAME} ${PKG_BOTS_CLASSES} ${PKG_BOTS_RESOURCES} \
 	&& mv ${PKG_BOTS_FILENAME} ../../../../${WORK_PATH}
 	cp ${BOTS_DIR}/dev/scripts/* ${WORK_PATH}
 clean:

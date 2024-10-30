@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.model.request.ParseMode;
 import com.pengrad.telegrambot.request.SendPhoto;
 import org.eustrosoft.bot.telegram.BasicTelegramBot;
 import org.eustrosoft.bot.telegram.Constants;
+import org.eustrosoft.bot.telegram.config.BotProperties;
 import org.eustrosoft.bot.telegram.enums.QRType;
 
 import java.io.ByteArrayOutputStream;
@@ -38,6 +39,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
     private final String qrGenerateUrl;
     private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final static File LOG_FILE = new File("logs.txt");
+    private final BotProperties botProperties;
 
     @Override
     public void run() {
@@ -54,7 +56,7 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
                     e.response().errorCode();
                     e.response().description();
                 } else {
-                    e.printStackTrace();
+                    logger.log(Level.WARNING, e.getMessage());
                 }
             });
 
@@ -105,9 +107,10 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
         return this.telegramBot;
     }
 
-    public AAbominationBot(String token, String qrGenerateUrl) {
-        this.token = token;
-        this.qrGenerateUrl = qrGenerateUrl;
+    public AAbominationBot() throws Exception {
+        this.botProperties = BotProperties.getInstance();
+        this.token = this.botProperties.getBotToken();
+        this.qrGenerateUrl = this.botProperties.getQxyzUrl();
     }
 
     public class AbominationBotListener implements UpdatesListener {
