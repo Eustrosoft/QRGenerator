@@ -166,7 +166,7 @@ CorrectionLevel: [L, M, Q, H]
 - Recommended command to add is `/types` - to add a command for showing available qr types.
 ## Project setup & properties
 ### Dependencies
-All dependencies, that you need are showed here:
+All dependencies, that you need are shown here:
 - java-telegram-bot-api 7.9.1
 - gson-2.10.1
 - logging-interceptor-4.12.0

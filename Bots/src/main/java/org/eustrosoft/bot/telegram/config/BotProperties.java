@@ -3,7 +3,7 @@ package org.eustrosoft.bot.telegram.config;
 import java.util.Properties;
 
 public class BotProperties {
-    public final static String PROPERTIES_FILE_NAME = "resources/application.properties";
+    public final static String PROPERTIES_FILE_NAME = "application.properties";
 
     public final static String PROPERTIES_BOT_TOKEN = "bot.token";
     public final static String PROPERTIES_QXYZ_URL = "qxyz.url";
