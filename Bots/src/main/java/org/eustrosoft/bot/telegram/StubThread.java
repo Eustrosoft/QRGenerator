@@ -14,7 +14,7 @@ public class StubThread implements Runnable {
     @Override
     public void run() {
         initLogger();
-        printNumbers();
+        // printNumbers();
     }
 
     private void initLogger() {

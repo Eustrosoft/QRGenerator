@@ -159,8 +159,8 @@ public class AAbominationBot extends BasicTelegramBot implements Runnable {
 
         private void processMessage(Update update) {
             Message message = update.message();
-            if (message == null) {
-                logger.log(Level.WARNING, "Message is null. Skipping.");
+            if (message == null || message.text() == null) {
+                logger.log(Level.WARNING, "Message or message text is null. Skipping.");
                 return;
             }
             String messageText = message.text();
